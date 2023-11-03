@@ -34,8 +34,8 @@ const config: Config = {
           800: '#F4F6F8',
           850: '#FDFDFD',
           700: '#DCE3F1',
-          500: '#7B8EC8',
-          400: '#858EAD',
+          500: '#636363',
+          400: '#141414',
         },
         'accent-purple': '#4C02E8',
       },
@@ -76,4 +76,5 @@ const config: Config = {
   },
   plugins: [require('tailwindcss-animate'), require('@tailwindcss/typography')],
 };
+
 export default config;
