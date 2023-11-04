@@ -16,23 +16,20 @@ interface SkinContextType {
 const SkinContext = createContext<SkinContextType | undefined>(undefined);
 
 export const SkinProvider = ({ children }: PropsWithChildren) => {
-  const [skin, setSkin] = useState('');
+  // const localSkinStore = localStorage.getItem('skin');
+  const [skin, setSkin] = useState('light');
 
   const skinChange = () => {
-    if (
-      localStorage.skin === 'dark' ||
-      (!('skin' in localStorage) &&
-        matchMedia('(prefers-color-scheme: dark)').matches)
-    ) {
-      setSkin('dark');
+    if (skin === 'dark') {
       document.documentElement.classList.add('dark');
+      document.documentElement.classList.remove('light');
+      localStorage.setItem('skin', 'dark');
     } else {
-      setSkin('light');
       document.documentElement.classList.add('light');
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('skin', 'light');
     }
   };
-
-  console.log(skin);
 
   useEffect(() => {
     skinChange();
