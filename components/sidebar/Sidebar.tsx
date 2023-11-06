@@ -8,7 +8,7 @@ import { SignedOut } from '@clerk/nextjs';
 const Sidebar = () => {
   const pathname = usePathname();
   return (
-    <section className="hidden min-h-full lg:min-w-[15rem] pt-24 md:flex flex-col justify-between py-4 px-2 border-r border-black/10 dark:border-white/20">
+    <section className="hidden min-h-full md:min-w-[5rem] lg:min-w-[15rem] pt-24 md:flex flex-col justify-between py-4 px-2 border-r border-black/10 dark:border-white/20">
       <div className="flex flex-col gap-4 pt-6">
         {sidebarLinks.map((item, index) => {
           const { label, route, icon } = item;
