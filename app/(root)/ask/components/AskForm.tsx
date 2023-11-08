@@ -1,9 +1,9 @@
 'use client';
 
+import React, { useRef } from 'react';
+import * as z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
-import * as z from 'zod';
-import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
@@ -14,9 +14,21 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Editor } from '@tinymce/tinymce-react';
+
 import { AskSchema } from '@/lib/validators';
 
 const AskForm = () => {
+  // editor reference
+  const editorRef = useRef(null);
+
+  const log = () => {
+    if (editorRef.current) {
+      console.log(editorRef.current.getContent());
+    }
+  };
+
   const form = useForm<z.infer<typeof AskSchema>>({
     resolver: zodResolver(AskSchema),
     defaultValues: {
@@ -29,6 +41,30 @@ const AskForm = () => {
   function onSubmit(values: z.infer<typeof AskSchema>) {
     console.log(values);
   }
+
+  const handleInputKeyDown = (
+    e: React.KeyboardEvent<HTMLInputElement>,
+    field: any
+  ) => {
+    if (e.key === 'Enter' && field.name === 'tags') {
+      e.preventDefault();
+
+      const tagInput = e.target as HTMLInputElement;
+      const tagValue = tagInput.value.trim();
+
+      if (tagValue !== '') {
+        if (tagValue.length > 15) {
+          return form.setError('tags', {
+            type: 'required',
+            message: 'Tag must be less than 15 characters.',
+          });
+        }
+
+        if (!field.value.includes(tagValue as never)) {
+        }
+      }
+    }
+  };
 
   return (
     <Form {...form}>
@@ -44,7 +80,12 @@ const AskForm = () => {
               <FormLabel className="paragraph-semibold text-dark-400_light-800">
                 Question Title <span className="text-primary-500"> *</span>
               </FormLabel>
-              <FormControl className="mt-3.5">{/* editor input */}</FormControl>
+              <FormControl className="mt-3.5">
+                <Input
+                  {...field}
+                  className="min-h-[48px] paragraph-regular no-focus  text-dark-300_light-700 border-black/20 dark:border-white/30"
+                />
+              </FormControl>
               <FormDescription className="body-regular mt-2.5 text-light-500">
                 Be specific with your question
               </FormDescription>
@@ -63,9 +104,29 @@ const AskForm = () => {
                 <span className="text-primary-500"> *</span>
               </FormLabel>
               <FormControl className="mt-3.5">
-                <Input
-                  {...field}
-                  className="min-h-[48px] paragraph-regular no-focus  text-dark-300_light-700 border-black/20 dark:border-white/30"
+                <Editor
+                  apiKey={process.env.NEXT_PUBLIC_EDITOR}
+                  onInit={(evt, editor) =>
+                    // @ts-ignore
+                    (editorRef.current = editor)
+                  }
+                  initialValue=""
+                  init={{
+                    height: 300,
+                    menubar: false,
+                    plugins: [
+                      'advlist autolink lists link image charmap print preview anchor',
+                      'searchreplace visualblocks code fullscreen',
+                      'insertdatetime media table paste code help wordcount',
+                    ],
+                    toolbar:
+                      'undo redo | formatselect | ' +
+                      'bold italic forecolor | alignleft aligncenter ' +
+                      'alignright alignjustify | bullist numlist outdent indent | ' +
+                      'removeformat ',
+                    content_style:
+                      'body { font-family:Inter,Arial,sans-serif; font-size:14px }',
+                  }}
                 />
               </FormControl>
               <FormDescription className="body-regular mt-2.5 text-light-500">
@@ -87,7 +148,7 @@ const AskForm = () => {
               </FormLabel>
               <FormControl className="mt-3.5">
                 <Input
-                  {...field}
+                  onKeyDown={(e) => handleInputKeyDown(e, field)}
                   placeholder="Tags here..."
                   className="min-h-[48px] paragraph-regular no-focus  text-dark-300_light-700 border-black/20 dark:border-white/30"
                 />
