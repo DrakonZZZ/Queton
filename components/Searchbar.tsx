@@ -25,7 +25,7 @@ const Searchbar = ({
             type="text"
             placeholder={placeHolder}
             // value=""
-            className="paragraph-regular placholder border-none shadow-none outline-none no-focus text-black dark:text-white"
+            className="paragraph-regular placholder border-none shadow-none outline-none no-focus dark:text-white"
           />
           {icontype}
         </div>
