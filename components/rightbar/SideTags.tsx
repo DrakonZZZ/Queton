@@ -1,24 +1,28 @@
 import Link from 'next/link';
 
 interface SideTageProps {
-  _id: number;
+  id: string;
   title: string;
   topicCount?: boolean;
   totlaQuestions?: number;
+  addonClasses: string;
 }
 
 const SideTags = ({
-  _id,
+  id,
   title,
   topicCount,
   totlaQuestions,
+  addonClasses,
 }: SideTageProps) => {
   return (
     <Link
-      href={`/tags/${_id}`}
-      className="flex flex-row justify-between items-center flex-wrap gap-2 px-6"
+      href={`/tags/${id}`}
+      className="flex flex-row justify-between items-center flex-wrap gap-2 "
     >
-      <div className="text-sm font-bold text-justify p-2 rounded-lg text-zinc-500">
+      <div
+        className={`${addonClasses} font-semibold text-justify p-2 rounded-lg text-black/60 dark:text-white/60`}
+      >
         <span>#</span> {title}
       </div>
       {topicCount && (

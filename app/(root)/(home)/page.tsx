@@ -45,16 +45,19 @@ const Home = () => {
         <div className="w-full mt-10 flex flex-col gap-6">
           {questions.length > 0 ? (
             questions.map((q, idx) => {
-              const {
-                id,
-                title,
-                author,
-                upvotes,
-                view,
-                createAt,
-                tags: [{ id: tagId, tagName }],
-              } = q;
-              return <QuestionCard key={id} />;
+              const { id, title, author, upvotes, view, createAt, tags } = q;
+              return (
+                <QuestionCard
+                  key={id}
+                  id={id}
+                  title={title}
+                  author={author}
+                  upvotes={upvotes}
+                  view={view}
+                  createAt={createAt}
+                  tags={tags}
+                />
+              );
             })
           ) : (
             <NoResults
