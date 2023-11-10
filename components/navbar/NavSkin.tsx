@@ -2,7 +2,6 @@
 
 import { useSkin } from '@/context/skinProvider';
 import { BsSunFill, BsMoonFill } from 'react-icons/bs';
-import { skins } from '@/constants/skins';
 
 const NavSkin = () => {
   const { skin, setSkin } = useSkin();
@@ -11,7 +10,7 @@ const NavSkin = () => {
     <div>
       {skin === 'light' ? (
         <span
-          className=""
+          className="cursor-pointer"
           onClick={() => {
             setSkin('dark');
 

@@ -7,7 +7,7 @@ import Search from './Search';
 
 const Navbar = () => {
   return (
-    <nav className="fixed w-full flex-between gap-5 background-light-900_dark-100 p-6 sm:px-12 sahdow-light-300 dark:shadow-none z-50">
+    <nav className="fixed w-full flex-between gap-5 background-light-900_dark-100 p-6 sm:px-12 bg-light-850 dark:bg-black dark:shadow-none z-50 ">
       <Link href="/" className="flex items-center gap-1">
         {/* <Image
           src={'/assets/images/site-logo.svg'}
@@ -15,7 +15,7 @@ const Navbar = () => {
           height={24}
           alt="site-logo"
         /> */}
-        <span className="h2-bold font-spaceGrotesk dark:text-light-900 max-sm:hidden">
+        <span className="h2-bold font-extrabold font-spaceGrotesk dark:text-light-900 max-sm:hidden">
           Queton
         </span>
       </Link>

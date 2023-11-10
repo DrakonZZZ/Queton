@@ -78,7 +78,7 @@ const NavContent = () => {
                 isActive
                   ? 'text-black/90 dark:text-white/90'
                   : 'text-black/50 dark:text-white/60 '
-              } py-3 px-2 border-b border-primary-300/50 dark:hover:text-white/70`}
+              } py-3 px-2 border-b border-primary-300/50 hover:text-black dark:hover:text-white/70`}
             >
               <p className="text-2xl w-full">{label}</p>
             </Link>
