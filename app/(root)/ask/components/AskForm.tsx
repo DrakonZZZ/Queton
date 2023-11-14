@@ -18,6 +18,8 @@ import { Button } from '@/components/ui/button';
 import { Editor } from '@tinymce/tinymce-react';
 
 import { AskSchema } from '@/lib/validators';
+import Tag from '@/components/Tag';
+import { AnyARecord } from 'dns';
 
 const AskForm = () => {
   // editor reference
@@ -60,10 +62,21 @@ const AskForm = () => {
           });
         }
 
+        //checking if tag doesn't exist in the field
         if (!field.value.includes(tagValue as never)) {
+          form.setValue('tags', [...field.value, tagValue]);
+          tagInput.value = '';
+          form.clearErrors('tags');
         }
+      } else {
+        form.trigger();
       }
     }
+  };
+
+  const handleTagRemove = (tag: string, field: any) => {
+    const newTags = field.value.filter((tagName: string) => tagName !== tag);
+    form.setValue('tags', newTags);
   };
 
   return (
@@ -147,11 +160,30 @@ const AskForm = () => {
                 <span className="text-primary-500"> *</span>
               </FormLabel>
               <FormControl className="mt-3.5">
-                <Input
-                  onKeyDown={(e) => handleInputKeyDown(e, field)}
-                  placeholder="Tags here..."
-                  className="min-h-[48px] paragraph-regular no-focus  text-dark-300_light-700 border-black/20 dark:border-white/30"
-                />
+                <>
+                  <Input
+                    onKeyDown={(e) => handleInputKeyDown(e, field)}
+                    placeholder="Tags here..."
+                    className="min-h-[48px] paragraph-regular no-focus  text-dark-300_light-700 border-black/20 dark:border-white/30"
+                  />
+                  {field.value.length > 0 && (
+                    <div className="flex-start gap-2 mt-2.5 ">
+                      {field.value.map((tag: any) => {
+                        return (
+                          <div
+                            key={tag}
+                            onClick={() => handleTagRemove(tag, field)}
+                          >
+                            <Tag
+                              title={tag}
+                              addonClasses="bg-black/80 dark:bg-white text-white dark:text-black py-1 px-3 text-sm cursor-pointer"
+                            />
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+                </>
               </FormControl>
               <FormDescription className="body-regular mt-2.5 text-light-500">
                 You can add tags related to your question by describing the main
