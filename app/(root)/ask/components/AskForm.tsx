@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import * as z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
@@ -19,17 +19,15 @@ import { Editor } from '@tinymce/tinymce-react';
 
 import { AskSchema } from '@/lib/validators';
 import Tag from '@/components/Tag';
-import { AnyARecord } from 'dns';
+import { askQuestion } from '@/lib/actions/ask.action';
 
 const AskForm = () => {
+  const [isSubmitting, setSubmitting] = useState(false);
   // editor reference
   const editorRef = useRef(null);
 
-  const log = () => {
-    if (editorRef.current) {
-      console.log(editorRef.current.getContent());
-    }
-  };
+  //for button type
+  const type: any = 'create';
 
   const form = useForm<z.infer<typeof AskSchema>>({
     resolver: zodResolver(AskSchema),
@@ -40,9 +38,24 @@ const AskForm = () => {
     },
   });
 
-  function onSubmit(values: z.infer<typeof AskSchema>) {
+  async function onSubmit(values: z.infer<typeof AskSchema>) {
+    setSubmitting(true);
+    try {
+      //api call to backend containing all form data
+      await askQuestion({});
+      //redirect to home page
+    } catch (error) {
+    } finally {
+      setSubmitting(false);
+    }
     console.log(values);
   }
+
+  const log = () => {
+    if (editorRef.current) {
+      console.log(editorRef.current.getContent());
+    }
+  };
 
   const handleInputKeyDown = (
     e: React.KeyboardEvent<HTMLInputElement>,
@@ -123,6 +136,8 @@ const AskForm = () => {
                     // @ts-ignore
                     (editorRef.current = editor)
                   }
+                  onBlur={field.onBlur}
+                  onEditorChange={(content) => field.onChange(content)}
                   initialValue=""
                   init={{
                     height: 300,
@@ -196,9 +211,14 @@ const AskForm = () => {
 
         <Button
           type="submit"
-          className="bg-black text-white dark:bg-white dark:text-black min-h-[30px] px-4 py-3 rounded-md hover:bg-black/70 dark:hover:bg-white/80 transistion"
+          className="w-fit bg-black text-white dark:bg-white dark:text-black min-h-[30px] px-6 py-3 rounded-md hover:bg-black/70 dark:hover:bg-white/80 transistion self-end"
+          disabled={isSubmitting}
         >
-          Submit
+          {isSubmitting ? (
+            <>{type === 'edit' ? 'Editing...' : 'Posting...'}</>
+          ) : (
+            <>{type === 'edit' ? 'Edit Question' : 'Ask a Question'}</>
+          )}
         </Button>
       </form>
     </Form>
