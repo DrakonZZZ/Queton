@@ -8,8 +8,10 @@ import HomeFilter from './components/HomeFilter';
 import { questions } from '@/constants/questions';
 import NoResults from '@/components/NoResults';
 import QuestionCard from '@/components/QuestionCard';
+import { getQuestions } from '@/lib/actions/ask.action';
 
-const Home = () => {
+const Home = async () => {
+  const data = await getQuestions({});
   return (
     <>
       <div className="w-full flex justify-between flex-col-reverse gap-4 sm:flex-row">
@@ -43,9 +45,9 @@ const Home = () => {
 
         <HomeFilter />
         <div className="w-full mt-10 flex flex-col gap-6">
-          {questions.length > 0 ? (
-            questions.map((q, idx) => {
-              const { id, title, author, upvotes, view, createAt, tags } = q;
+          {data.length > 0 ? (
+            data.map((q, idx) => {
+              const { id, title, author, upvotes, view, createdAt, tags } = q;
               return (
                 <QuestionCard
                   key={id}
@@ -54,7 +56,7 @@ const Home = () => {
                   author={author}
                   upvotes={upvotes}
                   view={view}
-                  createAt={createAt}
+                  createAt={createdAt}
                   tags={tags}
                 />
               );

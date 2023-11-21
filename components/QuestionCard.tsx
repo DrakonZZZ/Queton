@@ -14,7 +14,7 @@ interface QuestionProps {
   upvotes: number;
   view: number;
   createAt: Date;
-  tags: { id: number; tagName: string }[];
+  tags: { id: number; name: string }[];
 }
 
 const QuestionCard = ({
@@ -42,14 +42,10 @@ const QuestionCard = ({
 
       <div className="mt-3.5 flex flex-wrap gap-1">
         {tags.map((tag) => {
-          const { id, tagName } = tag;
+          const { id, name } = tag;
+          console.log(tag.name);
           return (
-            <SideTags
-              key={id}
-              id={tagName}
-              title={tagName}
-              addonClasses="text-sm"
-            />
+            <SideTags key={id} id={name} title={name} addonClasses="text-sm" />
           );
         })}
       </div>

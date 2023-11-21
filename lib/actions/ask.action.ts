@@ -3,8 +3,25 @@
 import TagDb from '../db/models/tag.model';
 import Question from '../db/models/question.model';
 import { connectToDb } from '../db/mongoose';
+import { AskParams, GetQuestionsParams } from './shared.types';
+import User from '../db/models/user.model';
 
-export async function askQuestion(params: any) {
+export async function getQuestions(params: GetQuestionsParams) {
+  try {
+    connectToDb();
+
+    const questions = await Question.find({})
+      .populate({ path: 'tags', model: TagDb })
+      .populate({ path: 'author', model: User });
+
+    return questions;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+export async function askQuestion(params: AskParams) {
   try {
     connectToDb();
     const { title, content, tags, author, path } = params;
