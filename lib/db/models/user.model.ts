@@ -10,7 +10,7 @@ export interface IUser extends Document {
   avatar: string;
   location?: string;
   personalPage?: string;
-  reputation: number;
+  level: number;
   saved: Schema.Types.ObjectId[];
   joined: Date;
 }
@@ -51,7 +51,7 @@ const UserSchema = new Schema<IUser>({
   personalPage: {
     type: String,
   },
-  reputation: {
+  level: {
     type: Number,
     required: true,
     default: 0,

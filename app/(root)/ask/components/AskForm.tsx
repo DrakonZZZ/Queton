@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useRef, useState } from 'react';
+import { useRouter, usePathname } from 'next/navigation';
 import * as z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
@@ -21,10 +22,16 @@ import { AskSchema } from '@/lib/validators';
 import Tag from '@/components/Tag';
 import { askQuestion } from '@/lib/actions/ask.action';
 
-const AskForm = () => {
+interface AskProps {
+  dbUserId: string;
+}
+
+const AskForm = ({ dbUserId }: AskProps) => {
   const [isSubmitting, setSubmitting] = useState(false);
   // editor reference
   const editorRef = useRef(null);
+  const router = useRouter();
+  const pathname = usePathname();
 
   //for button type
   const type: any = 'create';
@@ -42,8 +49,14 @@ const AskForm = () => {
     setSubmitting(true);
     try {
       //api call to backend containing all form data
-      await askQuestion({});
+      await askQuestion({
+        title: values.title,
+        content: values.description,
+        tags: values.tags,
+        author: JSON.parse(dbUserId),
+      });
       //redirect to home page
+      router.push('/');
     } catch (error) {
     } finally {
       setSubmitting(false);
