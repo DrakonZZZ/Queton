@@ -3,7 +3,6 @@ import { Inter } from 'next/font/google';
 import { ClerkProvider } from '@clerk/nextjs';
 import './globals.css';
 import { SkinProvider } from '@/context/skinProvider';
-import { neobrutalism } from '@clerk/themes';
 
 const inter = Inter({ subsets: ['latin'] });
 
