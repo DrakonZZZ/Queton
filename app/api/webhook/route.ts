@@ -1,6 +1,8 @@
 import { Webhook } from 'svix';
 import { headers } from 'next/headers';
 import { WebhookEvent } from '@clerk/nextjs/server';
+import { createUser, updateUser, deleteUser } from '@/lib/actions/user.action';
+import { NextResponse } from 'next/server';
 
 export async function POST(req: Request) {
   // You can find this in the Clerk Dashboard -> Webhooks -> choose the webhook
@@ -48,13 +50,48 @@ export async function POST(req: Request) {
     });
   }
 
-  // Get the ID and type
-  const { id } = evt.data;
   const eventType = evt.type;
 
+  //types of webhook events actions
   if (eventType === 'user.created') {
     const { id, username, email_addresses, image_url, first_name, last_name } =
       evt.data;
+
+    const dbUser = await createUser({
+      clerkId: id,
+      username: username!,
+      name: `${first_name} ${last_name ? ` ${last_name}` : ''}`,
+      email: email_addresses[0].email_address,
+      avatar: image_url,
+    });
+
+    return NextResponse.json({ message: 'OK', dbUser });
+  }
+
+  if (eventType === 'user.updated') {
+    const { id, username, email_addresses, image_url, first_name, last_name } =
+      evt.data;
+
+    const dbUser = await updateUser({
+      clerkId: id,
+      updateData: {
+        username: username!,
+        name: `${first_name} ${last_name ? ` ${last_name}` : ''}`,
+        email: email_addresses[0].email_address,
+        avatar: image_url,
+      },
+      path: `/profile/${id}`,
+    });
+
+    return NextResponse.json({ message: 'OK', dbUser });
+  }
+
+  if (eventType === 'user.deleted') {
+    const { id } = evt.data;
+
+    const deletedUser = await deleteUser({ clerkId: id! });
+
+    return NextResponse.json({ message: 'OK', user: deletedUser });
   }
 
   return new Response('', { status: 200 });

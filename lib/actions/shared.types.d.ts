@@ -15,3 +15,21 @@ export interface AskParams {
   author: Schema.types.ObjectId | IUser;
   path: string;
 }
+
+export interface CreateUserParams {
+  clerkId: string;
+  name: string;
+  username: string;
+  email: string;
+  avatar: string;
+}
+
+export interface UpdateUserParams {
+  clerkId: string;
+  updateData: Partial<IUser>;
+  path: string;
+}
+
+export interface DeleteUserParams {
+  clerkId: string;
+}
