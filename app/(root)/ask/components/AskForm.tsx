@@ -54,6 +54,7 @@ const AskForm = ({ dbUserId }: AskProps) => {
         content: values.description,
         tags: values.tags,
         author: JSON.parse(dbUserId),
+        path: pathname,
       });
       //redirect to home page
       router.push('/');
