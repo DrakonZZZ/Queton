@@ -65,12 +65,6 @@ const AskForm = ({ dbUserId }: AskProps) => {
     console.log(values);
   }
 
-  const log = () => {
-    if (editorRef.current) {
-      console.log(editorRef.current.getContent());
-    }
-  };
-
   const handleInputKeyDown = (
     e: React.KeyboardEvent<HTMLInputElement>,
     field: any
