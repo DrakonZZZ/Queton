@@ -45,7 +45,7 @@ const QuestionCard = ({
           const { id, name } = tag;
           console.log(tag.name);
           return (
-            <SideTags key={id} id={name} title={name} addonClasses="text-sm" />
+            <SideTags key={id} _id={name} title={name} addonClasses="text-sm" />
           );
         })}
       </div>
