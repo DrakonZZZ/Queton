@@ -1,15 +1,16 @@
 import Link from 'next/link';
+import Tag from '../Tag';
 
 interface SideTageProps {
-  id: string;
+  _id: string | number;
   title: string;
   topicCount?: boolean;
   totlaQuestions?: number;
-  addonClasses: string;
+  addonClasses?: string;
 }
 
 const SideTags = ({
-  id,
+  _id,
   title,
   topicCount,
   totlaQuestions,
@@ -17,14 +18,10 @@ const SideTags = ({
 }: SideTageProps) => {
   return (
     <Link
-      href={`/tags/${id}`}
+      href={`/tags/${_id}`}
       className="flex flex-row justify-between items-center flex-wrap gap-2 "
     >
-      <div
-        className={`${addonClasses} font-semibold text-justify p-2 rounded-lg text-black/60 dark:text-white/60`}
-      >
-        <span>#</span> {title}
-      </div>
+      <Tag addonClasses={addonClasses} title={title} />
       {topicCount && (
         <span className="dark:text-white/70 text-sm">{totlaQuestions}</span>
       )}

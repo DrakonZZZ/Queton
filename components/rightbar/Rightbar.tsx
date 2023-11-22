@@ -37,6 +37,7 @@ const Rightbar = () => {
                 title="title"
                 topicCount={true}
                 totlaQuestions={4}
+                addonClasses="dark:text-white/60"
               />
             );
           })}
