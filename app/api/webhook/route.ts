@@ -66,7 +66,7 @@ export async function POST(req: Request) {
       avatar: image_url,
     });
 
-    return NextResponse.json({ message: 'OK', dbUser });
+    return NextResponse.json({ message: 'OK', user: dbUser });
   }
 
   if (eventType === 'user.updated') {
@@ -84,7 +84,7 @@ export async function POST(req: Request) {
       path: `/profile/${id}`,
     });
 
-    return NextResponse.json({ message: 'OK', dbUser });
+    return NextResponse.json({ message: 'OK', user: dbUser });
   }
 
   if (eventType === 'user.deleted') {

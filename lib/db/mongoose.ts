@@ -10,7 +10,7 @@ export const connectToDb = async () => {
   }
 
   if (isConnected) {
-    return console.log('Connectiion online');
+    return console.log('Connection online');
   }
 
   try {
