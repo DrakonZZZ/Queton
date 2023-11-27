@@ -44,5 +44,8 @@ export const SkinProvider = ({ children }: PropsWithChildren) => {
 
 export const useSkin = () => {
   const context = useContext(SkinContext);
+  if (context === undefined) {
+    throw new Error('useSkin must be user within a SkinProvider');
+  }
   return context;
 };

@@ -19,19 +19,16 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <SkinProvider>
-          <ClerkProvider
-            appearance={{
-              elements: {
-                formButtonPrimary: 'primary-gradient',
-                footerActionLink:
-                  'primary-text-gradient hover: text-primary-500',
-              },
-            }}
-          >
-            {children}
-          </ClerkProvider>
-        </SkinProvider>
+        <ClerkProvider
+          appearance={{
+            elements: {
+              formButtonPrimary: 'primary-gradient',
+              footerActionLink: 'primary-text-gradient hover: text-primary-500',
+            },
+          }}
+        >
+          <SkinProvider>{children}</SkinProvider>
+        </ClerkProvider>
       </body>
     </html>
   );
