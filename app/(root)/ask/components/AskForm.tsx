@@ -20,7 +20,7 @@ import { Editor } from '@tinymce/tinymce-react';
 
 import { AskSchema } from '@/lib/validators';
 import Tag from '@/components/Tag';
-import { askQuestion } from '@/lib/actions/ask.action';
+import { askQuestion } from '@/lib/actions/ask.actions';
 
 interface AskProps {
   dbUserId: string;

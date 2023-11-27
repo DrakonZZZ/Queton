@@ -8,7 +8,7 @@ import HomeFilter from './components/HomeFilter';
 import { questions } from '@/constants/questions';
 import NoResults from '@/components/NoResults';
 import QuestionCard from '@/components/QuestionCard';
-import { getQuestions } from '@/lib/actions/ask.action';
+import { getQuestions } from '@/lib/actions/ask.actions';
 
 const Home = async () => {
   const data = await getQuestions({});

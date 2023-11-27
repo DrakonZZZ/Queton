@@ -9,7 +9,7 @@ import {
 
 interface FilterProps {
   options: { name: string; value: string }[];
-  containerClasses: string;
+  containerClasses?: string;
   addOnClasses: string;
 }
 
