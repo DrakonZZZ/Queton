@@ -52,3 +52,14 @@ export interface GetAllTagsParams {
   filter?: string;
   searchQuery?: string;
 }
+
+export interface GetQuestionByIdParams {
+  questionId: string;
+}
+
+export interface GetQuestionsByTagIdParams {
+  tagId: string;
+  page?: number;
+  pageSize?: number;
+  searchQuery?: string;
+}

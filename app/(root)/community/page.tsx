@@ -8,8 +8,6 @@ import AvatarCard from './components/AvatarCard';
 
 const Page = async () => {
   const result = await getAllUsers({});
-
-  console.log(result);
   return (
     <>
       <h1 className="h1-bold text-dark-100_light-900">All Questions</h1>

@@ -1,9 +1,13 @@
 'use server';
 
-import TagDb from '../db/models/tag.model';
+import Tag from '../db/models/tag.model';
 import Question from '../db/models/question.model';
 import { connectToDb } from '../db/mongoose';
-import { AskParams, GetQuestionsParams } from './shared.types';
+import {
+  AskParams,
+  GetQuestionsParams,
+  GetQuestionByIdParams,
+} from './shared.types';
 import User from '../db/models/user.model';
 
 export async function getQuestions(params: GetQuestionsParams) {
@@ -11,7 +15,7 @@ export async function getQuestions(params: GetQuestionsParams) {
     connectToDb();
 
     const questions = await Question.find({})
-      .populate({ path: 'tags', model: TagDb })
+      .populate({ path: 'tags', model: Tag })
       .populate({ path: 'author', model: User });
 
     return questions;
@@ -36,7 +40,7 @@ export async function askQuestion(params: AskParams) {
 
     for (const tag of tags) {
       // checking if tags exist then update else create
-      const existingTag = await TagDb.findOneAndUpdate(
+      const existingTag = await Tag.findOneAndUpdate(
         {
           name: { $regex: new RegExp(`^${tag}`, 'i') },
         },
@@ -61,4 +65,25 @@ export async function askQuestion(params: AskParams) {
 
     //increament author's level points
   } catch (error) {}
+}
+
+export async function getQuestionsById(params: GetQuestionByIdParams) {
+  try {
+    connectToDb();
+
+    const { questionId } = params;
+
+    const question = await Question.findById(questionId)
+      .populate({ path: 'tags', model: Tag, select: '_id name' })
+      .populate({
+        path: 'author',
+        model: User,
+        select: '_id clerkId name avatar',
+      });
+
+    return question;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
 }
