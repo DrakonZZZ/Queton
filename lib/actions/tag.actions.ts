@@ -1,8 +1,9 @@
 'use server';
 
+import Tag from '../db/models/tag.model';
 import User from '../db/models/user.model';
 import { connectToDb } from '../db/mongoose';
-import { GetActivityTagsParams } from './shared.types';
+import { GetActivityTagsParams, GetAllTagsParams } from './shared.types';
 
 export async function getAcivityTags(params: GetActivityTagsParams) {
   try {
@@ -21,6 +22,19 @@ export async function getAcivityTags(params: GetActivityTagsParams) {
       { _id: 2, name: 'Jesus' },
       { _id: 3, name: 'Father' },
     ];
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+export async function getAllTags(params: GetAllTagsParams) {
+  try {
+    connectToDb();
+
+    const tags = await Tag.find({});
+
+    return tags;
   } catch (error) {
     console.log(error);
     throw error;

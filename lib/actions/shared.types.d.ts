@@ -45,3 +45,10 @@ export interface GetActivityTagsParams {
   userId: string;
   limit?: number;
 }
+
+export interface GetAllTagsParams {
+  page?: number;
+  pageSize?: number;
+  filter?: string;
+  searchQuery?: string;
+}
