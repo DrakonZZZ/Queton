@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import { ClerkProvider } from '@clerk/nextjs';
 import './globals.css';
+import '../styles/parserTheme.css';
 import { SkinProvider } from '@/context/skinProvider';
 
 const inter = Inter({ subsets: ['latin'] });

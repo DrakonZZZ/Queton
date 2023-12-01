@@ -1,5 +1,3 @@
-import { abbreviateNumber } from '@/lib/abbreviateNumber';
-
 interface MetricProps {
   icon: React.ReactNode;
   title: string;
