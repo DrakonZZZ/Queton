@@ -10,9 +10,18 @@ import { abbreviateNumber } from '@/lib/abbreviateNumber';
 import ParseHTML from '@/components/ParseHTML';
 import Tag from '@/components/Tag';
 import { Answer } from './components/Answer';
+import { auth } from '@clerk/nextjs';
+import { getUserById } from '@/lib/actions/user.action';
+import AllReplies from './components/AllReplies';
 
 const page = async ({ params, searchParams }) => {
   const result = await getQuestionsById({ questionId: params.id });
+  const { userId: clerkId } = auth();
+
+  let dbUser;
+  if (clerkId) {
+    dbUser = await getUserById({ userId: clerkId });
+  }
   return (
     <>
       <div className="w-full border border-black/10  dark:border-white/30 p-6 rounded-sm">
@@ -76,7 +85,16 @@ const page = async ({ params, searchParams }) => {
           })}
         </div>
       </div>
-      <Answer />
+      <AllReplies
+        userId={JSON.stringify(dbUser)}
+        questionId={result._id}
+        totalReplies={result.replies.length}
+      />
+      <Answer
+        authorId={JSON.stringify(dbUser)}
+        question={result.content}
+        questionId={JSON.stringify(result._id)}
+      />
     </>
   );
 };

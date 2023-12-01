@@ -7,15 +7,22 @@ import { AnswerSchema } from '@/lib/validators';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Editor } from '@tinymce/tinymce-react';
-import { useSkin } from '@/context/skinProvider';
 import { Button } from '@/components/ui/button';
 import { FaWandMagicSparkles } from 'react-icons/fa6';
+import { createAnswer } from '@/lib/actions/answer.action';
+import { usePathname } from 'next/navigation';
 
-export const Answer = () => {
+interface AnswerProps {
+  authorId: string;
+  question: string;
+  questionId: string;
+}
+export const Answer = ({ authorId, question, questionId }: AnswerProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { skin } = useSkin();
-  console.log(skin);
+
+  const pathname = usePathname();
   const editorRef = useRef(null);
+
   const form = useForm<z.infer<typeof AnswerSchema>>({
     resolver: zodResolver(AnswerSchema),
     defaultValues: {
@@ -23,7 +30,29 @@ export const Answer = () => {
     },
   });
 
-  const handleCreateAnswer = (data) => {};
+  const handleCreateAnswer = async (values: z.infer<typeof AnswerSchema>) => {
+    setIsSubmitting(true);
+
+    try {
+      await createAnswer({
+        author: JSON.parse(authorId),
+        content: values.answer,
+        question: JSON.parse(questionId),
+        path: pathname,
+      });
+
+      form.reset();
+
+      if (editorRef.current) {
+        const editor = editorRef.current as any;
+        editor.setContent('');
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <div>
