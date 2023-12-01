@@ -20,7 +20,7 @@ import { Editor } from '@tinymce/tinymce-react';
 
 import { AskSchema } from '@/lib/validators';
 import Tag from '@/components/Tag';
-import { askQuestion } from '@/lib/actions/ask.action';
+import { askQuestion } from '@/lib/actions/ask.actions';
 
 interface AskProps {
   dbUserId: string;
@@ -54,6 +54,7 @@ const AskForm = ({ dbUserId }: AskProps) => {
         content: values.description,
         tags: values.tags,
         author: JSON.parse(dbUserId),
+        path: pathname,
       });
       //redirect to home page
       router.push('/');
@@ -63,12 +64,6 @@ const AskForm = ({ dbUserId }: AskProps) => {
     }
     console.log(values);
   }
-
-  const log = () => {
-    if (editorRef.current) {
-      console.log(editorRef.current.getContent());
-    }
-  };
 
   const handleInputKeyDown = (
     e: React.KeyboardEvent<HTMLInputElement>,

@@ -6,7 +6,7 @@ import { NextResponse } from 'next/server';
 
 export async function POST(req: Request) {
   // You can find this in the Clerk Dashboard -> Webhooks -> choose the webhook
-  const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET;
+  const WEBHOOK_SECRET = process.env.NEXT_CLERK_WEBHOOK_SECRET;
 
   if (!WEBHOOK_SECRET) {
     throw new Error(
@@ -52,6 +52,7 @@ export async function POST(req: Request) {
 
   const eventType = evt.type;
 
+  console.log(eventType);
   //types of webhook events actions
   if (eventType === 'user.created') {
     const { id, username, email_addresses, image_url, first_name, last_name } =
@@ -65,7 +66,7 @@ export async function POST(req: Request) {
       avatar: image_url,
     });
 
-    return NextResponse.json({ message: 'OK', dbUser });
+    return NextResponse.json({ message: 'OK', user: dbUser });
   }
 
   if (eventType === 'user.updated') {
@@ -83,7 +84,7 @@ export async function POST(req: Request) {
       path: `/profile/${id}`,
     });
 
-    return NextResponse.json({ message: 'OK', dbUser });
+    return NextResponse.json({ message: 'OK', user: dbUser });
   }
 
   if (eventType === 'user.deleted') {

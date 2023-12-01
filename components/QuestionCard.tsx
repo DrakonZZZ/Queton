@@ -10,7 +10,7 @@ import { timeStamp } from '@/lib/timeformat';
 interface QuestionProps {
   id: number;
   title: string;
-  author: { id: number; name: string; imgSrc: string };
+  author: { id: number; name: string; avatar: string };
   upvotes: number;
   view: number;
   createAt: Date;
@@ -45,13 +45,13 @@ const QuestionCard = ({
           const { id, name } = tag;
           console.log(tag.name);
           return (
-            <SideTags key={id} id={name} title={name} addonClasses="text-sm" />
+            <SideTags key={id} _id={name} title={name} addonClasses="text-sm" />
           );
         })}
       </div>
       <div className="w-full flex-between flex-wrap mt-6">
         <AvatarCard
-          imgSrc="/assets/icons/avatar.svg"
+          imgSrc={author.avatar}
           author={author.name}
           isAuthor={true}
           href={`/profile/${author.id}`}

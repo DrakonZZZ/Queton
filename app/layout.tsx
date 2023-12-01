@@ -3,7 +3,6 @@ import { Inter } from 'next/font/google';
 import { ClerkProvider } from '@clerk/nextjs';
 import './globals.css';
 import { SkinProvider } from '@/context/skinProvider';
-import { neobrutalism } from '@clerk/themes';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -20,19 +19,16 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <SkinProvider>
-          <ClerkProvider
-            appearance={{
-              elements: {
-                formButtonPrimary: 'primary-gradient',
-                footerActionLink:
-                  'primary-text-gradient hover: text-primary-500',
-              },
-            }}
-          >
-            {children}
-          </ClerkProvider>
-        </SkinProvider>
+        <ClerkProvider
+          appearance={{
+            elements: {
+              formButtonPrimary: 'primary-gradient',
+              footerActionLink: 'primary-text-gradient hover: text-primary-500',
+            },
+          }}
+        >
+          <SkinProvider>{children}</SkinProvider>
+        </ClerkProvider>
       </body>
     </html>
   );

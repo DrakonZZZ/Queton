@@ -51,17 +51,17 @@ const Sidebar = () => {
           <h3 className="p-2 text-black text-sm dark:text-white mb-2 border-b border-black/10  dark:border-white/30">
             Account
           </h3>
-          <div className="flex flex-col lg:flex-row justify-evenly items-center bg-black/80 dark:bg-white/60 text-white rounded-md">
+          <div className="flex flex-col lg:flex-row justify-evenly items-center bg-black/80 dark:bg-white text-white rounded-md">
             <Link
               href="/sign-up"
-              className="p-2  dark:text-black dark:hover:text-white/70 border-b border-white/50 dark:border-black/20  lg:border-none"
+              className="p-2  dark:text-black dark:hover:text-black/70 border-b border-white dark:border-black/20  lg:border-none"
             >
               <span className="lg:text-md md:text-sm w-full">Sign Up</span>
             </Link>
             <span className="hidden lg:block dark:text-black text-xl">/</span>
             <Link
               href="/sign-in"
-              className="p-2 dark:text-black dark:hover:text-white/70"
+              className="p-2 dark:text-black dark:hover:text-black/70"
             >
               <span className="lg:text-md md:text-sm w-full">Log In</span>
             </Link>

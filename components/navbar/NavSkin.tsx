@@ -13,9 +13,6 @@ const NavSkin = () => {
           className="cursor-pointer"
           onClick={() => {
             setSkin('dark');
-
-            if (skin !== 'system') {
-            }
           }}
         >
           <BsSunFill className="h-5 w-5" />

@@ -4,7 +4,7 @@ interface MetricProps {
   icon: React.ReactNode;
   title: string;
   addonTextStyle?: string;
-  value: number;
+  value: number | string;
   href?: string;
 }
 
@@ -13,7 +13,7 @@ const Metric = ({ icon, title, addonTextStyle, value, href }: MetricProps) => {
     <div className="flex-center flex-wrap gap-2">
       <span className={`${href ? 'rounded-full ' : ''}`}>{icon}</span>
       <p className={`${addonTextStyle} flex items-center gap-1`}>
-        {abbreviateNumber(value)} {title}
+        {value} {title}
       </p>
     </div>
   );
