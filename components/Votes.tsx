@@ -1,7 +1,9 @@
 'use client';
 
 import { abbreviateNumber } from '@/lib/abbreviateNumber';
-import { upvoteQuestion } from '@/lib/actions/ask.actions';
+import { downvoteAnswer, upvoteAnswer } from '@/lib/actions/answer.action';
+import { downvoteQuestion, upvoteQuestion } from '@/lib/actions/ask.actions';
+import { usePathname, useRouter } from 'next/navigation';
 import {
   BiUpvote,
   BiDownvote,
@@ -21,7 +23,7 @@ interface VotesProps {
   hasSaved?: boolean;
 }
 
-const Votes = async ({
+const Votes = ({
   type,
   itemId,
   userId,
@@ -31,9 +33,60 @@ const Votes = async ({
   hasdownVoted,
   hasSaved,
 }: VotesProps) => {
+  const pathname = usePathname();
+  const router = useRouter();
+
   const handleSave = () => {};
 
-  const handleVote = (action: string) => {};
+  const handleVote = async (action: string) => {
+    if (!userId) {
+      return;
+    }
+
+    if (action === 'upvote') {
+      if (type === 'Question') {
+        await upvoteQuestion({
+          questionId: JSON.parse(itemId),
+          userId: JSON.parse(userId),
+          hasupVoted,
+          hasdownVoted,
+          path: pathname,
+        });
+      } else if (type === 'Answer') {
+        await upvoteAnswer({
+          replyId: JSON.parse(itemId),
+          userId: JSON.parse(userId),
+          hasupVoted,
+          hasdownVoted,
+          path: pathname,
+        });
+      }
+      //display notif
+      return;
+    }
+
+    if (action === 'downvote') {
+      if (type === 'Question') {
+        await downvoteQuestion({
+          questionId: JSON.parse(itemId),
+          userId: JSON.parse(userId),
+          hasupVoted,
+          hasdownVoted,
+          path: pathname,
+        });
+      } else if (type === 'Answer') {
+        await downvoteAnswer({
+          replyId: JSON.parse(itemId),
+          userId: JSON.parse(userId),
+          hasupVoted,
+          hasdownVoted,
+          path: pathname,
+        });
+      }
+      //display notif
+      return;
+    }
+  };
 
   return (
     <div className="flex gap-5">
@@ -46,7 +99,7 @@ const Votes = async ({
               size={14}
               className="cursor-pointer dark:text-white"
               onClick={() => {
-                handlVote('upvote');
+                handleVote('upvote');
               }}
             />
           )}
@@ -66,7 +119,7 @@ const Votes = async ({
               size={14}
               className="cursor-pointer dark:text-white"
               onClick={() => {
-                handlVote('downvote');
+                handleVote('downvote');
               }}
             />
           )}
@@ -77,21 +130,23 @@ const Votes = async ({
           </p>
         </div>
       </div>
-      <div className="flex-center gap-1">
-        <div className="flex-center gap-1.5">
-          {hasSaved ? (
-            <FaBookmark size={12} />
-          ) : (
-            <FaRegBookmark
-              size={12}
-              className="cursor-pointer dark:text-white"
-              onClick={() => {
-                handleSave();
-              }}
-            />
-          )}
+      {type === 'Question' && (
+        <div className="flex-center gap-1">
+          <div className="flex-center gap-1.5">
+            {hasSaved ? (
+              <FaBookmark size={12} />
+            ) : (
+              <FaRegBookmark
+                size={12}
+                className="cursor-pointer dark:text-white"
+                onClick={() => {
+                  handleSave();
+                }}
+              />
+            )}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };

@@ -85,3 +85,11 @@ export interface QuestionVoteParams {
   hasdownVoted: boolean;
   path: string;
 }
+
+export interface AnswerVoteParams {
+  replyId: string;
+  userId: string;
+  hasupVoted: boolean;
+  hasdownVoted: boolean;
+  path: string;
+}

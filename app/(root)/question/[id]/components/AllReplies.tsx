@@ -1,5 +1,6 @@
 import Filter from '@/components/Filter';
 import ParseHTML from '@/components/ParseHTML';
+import Votes from '@/components/Votes';
 import { ReplyFilters } from '@/constants/filters';
 import { getAnswers } from '@/lib/actions/answer.action';
 import { timeStamp } from '@/lib/timeformat';
@@ -24,6 +25,7 @@ const AllReplies = async ({
   const result = await getAnswers({
     questionId,
   });
+
   return (
     <div className="mt-8">
       <div className="flex items-center justify-between">
@@ -60,7 +62,17 @@ const AllReplies = async ({
                       </p>
                     </div>
                   </Link>
-                  <div className="flex justify-end">rate</div>
+                </div>
+                <div className="flex justify-end">
+                  <Votes
+                    type="Answer"
+                    itemId={JSON.stringify(reply._id)}
+                    userId={JSON.stringify(userId)}
+                    upvotes={reply.upvotes.length}
+                    hasupVoted={reply.upvotes.includes(userId)}
+                    downvotes={reply.downvotes.length}
+                    hasdownVoted={reply.downvotes.includes(userId)}
+                  />
                 </div>
               </div>
               <ParseHTML data={reply.content} />

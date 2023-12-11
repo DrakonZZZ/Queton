@@ -129,7 +129,7 @@ export async function upvoteQuestion(params: QuestionVoteParams) {
 }
 
 export async function downvoteQuestion(params: QuestionVoteParams) {
-  const { questionId, userId, hasdownVoted, hasupVoted } = params;
+  const { questionId, userId, hasdownVoted, hasupVoted, path } = params;
 
   let updateQuery = {};
 
