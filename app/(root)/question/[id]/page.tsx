@@ -13,6 +13,7 @@ import { Answer } from './components/Answer';
 import { auth } from '@clerk/nextjs';
 import { getUserById } from '@/lib/actions/user.action';
 import AllReplies from './components/AllReplies';
+import Votes from '@/components/Votes';
 
 const page = async ({ params, searchParams }) => {
   const result = await getQuestionsById({ questionId: params.id });
@@ -42,7 +43,18 @@ const page = async ({ params, searchParams }) => {
                 {result?.author.name}
               </p>
             </Link>
-            <div className="flex justify-end">Voting</div>
+            <div className="flex justify-end">
+              <Votes
+                type="question"
+                itemId={JSON.stringify(result._id)}
+                userId={JSON.stringify(dbUser._id)}
+                upvotes={result.upvotes.length}
+                hasupVoted={result.upvotes.includes(dbUser._id)}
+                downvotes={result.downvotes.length}
+                hasdownVoted={result.downvotes.includes(dbUser._id)}
+                hadSaved={dbUser?.saved.includes(result._id)}
+              />
+            </div>
           </div>
 
           <h2 className="w-full h2-semibold text-dark-200_light-800 mt-3.5 capitalize">
@@ -73,7 +85,7 @@ const page = async ({ params, searchParams }) => {
         </div>
 
         <ParseHTML data={result.content} />
-        <div className="flex flex-wrap gap-2 border-t border-black/10  dark:border-white/30 pt-6">
+        <div className="flex flex-wrap gap-2  dark:border-white/30 pt-4 mt-4">
           {result.tags.map((tag: any) => {
             return (
               <Tag
@@ -85,15 +97,15 @@ const page = async ({ params, searchParams }) => {
           })}
         </div>
       </div>
-      <AllReplies
-        userId={JSON.stringify(dbUser)}
-        questionId={result._id}
-        totalReplies={result.replies.length}
-      />
       <Answer
         authorId={JSON.stringify(dbUser)}
         question={result.content}
         questionId={JSON.stringify(result._id)}
+      />
+      <AllReplies
+        userId={JSON.stringify(dbUser)}
+        questionId={result._id}
+        totalReplies={result.replies.length}
       />
     </>
   );
