@@ -23,6 +23,7 @@ const page = async ({ params, searchParams }) => {
   if (clerkId) {
     dbUser = await getUserById({ userId: clerkId });
   }
+
   return (
     <>
       <div className="w-full border border-black/10  dark:border-white/30 p-6 rounded-sm">
@@ -65,7 +66,6 @@ const page = async ({ params, searchParams }) => {
           <Metric
             icon={<WiTime1 size={15} className="text-dark-400_light-800" />}
             value={`asked ${timeStamp(result.createdAt)}`}
-            title="Votes"
             addonTextStyle="small-medium text-dark-400_light-800"
           />
           <Metric
@@ -78,7 +78,7 @@ const page = async ({ params, searchParams }) => {
             icon={
               <AiOutlineEye size={15} className="text-dark-400_light-800" />
             }
-            value={0}
+            value={result.view}
             title="views"
             addonTextStyle="small-medium text-dark-400_light-800"
           />

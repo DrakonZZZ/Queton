@@ -1,6 +1,6 @@
 interface MetricProps {
   icon: React.ReactNode;
-  title: string;
+  title?: string;
   addonTextStyle?: string;
   value: number | string;
   href?: string;

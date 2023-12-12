@@ -112,3 +112,7 @@ export interface ViewQuestionParams {
   questionId: string;
   userId: string | undefined;
 }
+
+export interface GetQuestionByIdParams {
+  questionId: string;
+}

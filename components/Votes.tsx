@@ -47,7 +47,6 @@ const Votes = ({
     });
   };
 
-  console.log(hasSaved);
   const handleVote = async (action: string) => {
     if (!userId) {
       return;
