@@ -12,6 +12,7 @@ interface QuestionProps {
   title: string;
   author: { id: number; name: string; avatar: string };
   upvotes: number;
+  replies: number;
   view: number;
   createAt: Date;
   tags: { id: number; name: string }[];
@@ -22,6 +23,7 @@ const QuestionCard = ({
   title,
   author,
   upvotes,
+  replies,
   view,
   createAt,
   tags,
@@ -66,7 +68,7 @@ const QuestionCard = ({
           />
           <Metric
             icon={<BiComment size={15} className="text-dark-400_light-800" />}
-            value={upvotes}
+            value={replies}
             title="Comments"
             addonTextStyle="small-medium text-dark-400_light-800"
           />

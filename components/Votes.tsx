@@ -3,6 +3,7 @@
 import { abbreviateNumber } from '@/lib/abbreviateNumber';
 import { downvoteAnswer, upvoteAnswer } from '@/lib/actions/answer.action';
 import { downvoteQuestion, upvoteQuestion } from '@/lib/actions/ask.actions';
+import { savedQuestion } from '@/lib/actions/user.action';
 import { usePathname, useRouter } from 'next/navigation';
 import {
   BiUpvote,
@@ -34,10 +35,17 @@ const Votes = ({
   hasSaved,
 }: VotesProps) => {
   const pathname = usePathname();
-  const router = useRouter();
+  // const router = useRouter();
 
-  const handleSave = () => {};
+  const handleSave = async () => {
+    await savedQuestion({
+      userId: JSON.parse(userId),
+      questionId: JSON.parse(itemId),
+      path: pathname,
+    });
+  };
 
+  console.log(hasSaved);
   const handleVote = async (action: string) => {
     if (!userId) {
       return;
@@ -91,18 +99,13 @@ const Votes = ({
   return (
     <div className="flex gap-5">
       <div className="flex-center gap-1">
-        <div className="flex-center gap-1.5">
-          {hasupVoted ? (
-            <BiSolidUpvote size={14} />
-          ) : (
-            <BiUpvote
-              size={14}
-              className="cursor-pointer dark:text-white"
-              onClick={() => {
-                handleVote('upvote');
-              }}
-            />
-          )}
+        <div
+          className="flex-center gap-1.5 cursor-pointer dark:text-white"
+          onClick={() => {
+            handleVote('upvote');
+          }}
+        >
+          {hasupVoted ? <BiSolidUpvote size={14} /> : <BiUpvote size={14} />}
         </div>
         <div className="flex-center  min-w-[18px] rounded-sm p-1">
           <p className="subtle-medium text-dark-400_light-900">
@@ -111,17 +114,16 @@ const Votes = ({
         </div>
       </div>
       <div className="flex-center gap-1">
-        <div className="flex-center gap-1.5">
+        <div
+          className="flex-center gap-1.5 cursor-pointer dark:text-white"
+          onClick={() => {
+            handleVote('downvote');
+          }}
+        >
           {hasdownVoted ? (
             <BiSolidDownvote size={14} />
           ) : (
-            <BiDownvote
-              size={14}
-              className="cursor-pointer dark:text-white"
-              onClick={() => {
-                handleVote('downvote');
-              }}
-            />
+            <BiDownvote size={14} />
           )}
         </div>
         <div className="flex-center  min-w-[18px] rounded-sm p-1">
@@ -132,18 +134,13 @@ const Votes = ({
       </div>
       {type === 'Question' && (
         <div className="flex-center gap-1">
-          <div className="flex-center gap-1.5">
-            {hasSaved ? (
-              <FaBookmark size={12} />
-            ) : (
-              <FaRegBookmark
-                size={12}
-                className="cursor-pointer dark:text-white"
-                onClick={() => {
-                  handleSave();
-                }}
-              />
-            )}
+          <div
+            className="flex-center gap-1.5 cursor-pointer dark:text-white"
+            onClick={() => {
+              handleSave();
+            }}
+          >
+            {hasSaved ? <FaBookmark size={12} /> : <FaRegBookmark size={12} />}
           </div>
         </div>
       )}

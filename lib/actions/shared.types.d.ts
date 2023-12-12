@@ -93,3 +93,17 @@ export interface AnswerVoteParams {
   hasdownVoted: boolean;
   path: string;
 }
+
+export interface SavedQuestionParams {
+  userId: string;
+  questionId: string;
+  path: string;
+}
+
+export interface GetSavedQuestionsParams {
+  clerkId: string;
+  page?: number;
+  pageSize?: number;
+  filter?: string;
+  searchQuery?: string;
+}
