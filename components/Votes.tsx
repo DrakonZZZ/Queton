@@ -3,8 +3,10 @@
 import { abbreviateNumber } from '@/lib/abbreviateNumber';
 import { downvoteAnswer, upvoteAnswer } from '@/lib/actions/answer.action';
 import { downvoteQuestion, upvoteQuestion } from '@/lib/actions/ask.actions';
+import { viewQuestion } from '@/lib/actions/displayAction.acions';
 import { savedQuestion } from '@/lib/actions/user.action';
 import { usePathname, useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 import {
   BiUpvote,
   BiDownvote,
@@ -35,7 +37,7 @@ const Votes = ({
   hasSaved,
 }: VotesProps) => {
   const pathname = usePathname();
-  // const router = useRouter();
+  const router = useRouter();
 
   const handleSave = async () => {
     await savedQuestion({
@@ -95,6 +97,13 @@ const Votes = ({
       return;
     }
   };
+
+  useEffect(() => {
+    viewQuestion({
+      questionId: JSON.parse(itemId),
+      userId: userId ? JSON.parse(userId) : undefined,
+    });
+  }, [itemId, userId, pathname, router]);
 
   return (
     <div className="flex gap-5">
