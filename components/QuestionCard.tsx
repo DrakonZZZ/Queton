@@ -10,12 +10,12 @@ import { timeStamp } from '@/lib/timeformat';
 interface QuestionProps {
   id: number;
   title: string;
-  author: { id: number; name: string; avatar: string };
+  author: { clerkId: string; name: string; avatar: string };
   upvotes: number;
   replies: number;
   view: number;
   createAt: Date;
-  tags: { id: number; name: string }[];
+  tags: { id: number; name: string; _id: string }[];
 }
 
 const QuestionCard = ({
@@ -44,10 +44,9 @@ const QuestionCard = ({
 
       <div className="mt-3.5 flex flex-wrap gap-1">
         {tags.map((tag) => {
-          const { id, name } = tag;
-          console.log(tag.name);
+          const { id, _id, name } = tag;
           return (
-            <SideTags key={id} _id={name} title={name} addonClasses="text-sm" />
+            <SideTags key={id} _id={_id} title={name} addonClasses="text-sm" />
           );
         })}
       </div>
@@ -56,7 +55,7 @@ const QuestionCard = ({
           imgSrc={author.avatar}
           author={author.name}
           isAuthor={true}
-          href={`/profile/${author.id}`}
+          href={`/profile/${author.clerkId}`}
           title={`- asked ${timeStamp(createAt)}`}
         />
         <div className="flex gap-3">

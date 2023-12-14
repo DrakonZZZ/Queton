@@ -3,19 +3,28 @@
 import { sidebarLinks } from '@/constants';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { SignedOut } from '@clerk/nextjs';
+import { SignedOut, useAuth } from '@clerk/nextjs';
 
 const Sidebar = () => {
   const pathname = usePathname();
+  const { userId } = useAuth();
+
   return (
     <section className="hidden min-h-full md:min-w-[5rem] lg:min-w-[15rem] pt-24 md:flex flex-col justify-between py-4 px-2 border-r border-black/10 dark:border-white/20">
       <div className="flex flex-col gap-4 pt-6">
         {sidebarLinks.map((item, index) => {
-          const { label, route, icon } = item;
+          let { label, route, icon } = item;
           const isActive =
             (pathname.includes(route) && route.length > 1) ||
             pathname === route;
 
+          if (route === '/profile') {
+            if (userId) {
+              route = `${route}/${userId}`;
+            } else {
+              return null;
+            }
+          }
           return (
             <Link
               key={route}

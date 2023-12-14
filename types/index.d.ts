@@ -3,3 +3,8 @@ export interface SidebarLink {
   label: string;
   icon: React.ReactNode;
 }
+
+export interface URLProps {
+  params: { id: string };
+  searchParams: { [key: string]: string | undefined };
+}

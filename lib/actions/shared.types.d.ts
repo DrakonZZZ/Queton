@@ -116,3 +116,7 @@ export interface ViewQuestionParams {
 export interface GetQuestionByIdParams {
   questionId: string;
 }
+
+export interface GetUserByIdParams {
+  userId: string;
+}

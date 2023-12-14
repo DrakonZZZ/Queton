@@ -36,7 +36,7 @@ const Collection = async () => {
 
         <div className="w-full mt-10 flex flex-col gap-6">
           {data.length > 0 ? (
-            data.map((q, idx) => {
+            data.map((q) => {
               const {
                 id,
                 title,
