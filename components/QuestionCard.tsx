@@ -9,6 +9,7 @@ import { timeStamp } from '@/lib/timeformat';
 
 interface QuestionProps {
   id: number;
+  clerkId?: string;
   title: string;
   author: { clerkId: string; name: string; avatar: string };
   upvotes: number;
@@ -20,6 +21,7 @@ interface QuestionProps {
 
 const QuestionCard = ({
   id,
+  clerkId,
   title,
   author,
   upvotes,

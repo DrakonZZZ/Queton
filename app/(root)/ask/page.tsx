@@ -10,7 +10,6 @@ const page = async () => {
 
   const dbUser = await getUserById({ userId });
 
-  console.log(dbUser);
   return (
     <div>
       <h1 className="h1-bold text-dark-100_light-900">Question</h1>

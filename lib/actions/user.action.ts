@@ -9,6 +9,7 @@ import {
   GetAllUsersParams,
   GetSavedQuestionsParams,
   GetUserByIdParams,
+  GetUserStatsParams,
   SavedQuestionParams,
   UpdateUserParams,
 } from './shared.types';
@@ -195,6 +196,52 @@ export async function getUserInfo(params: GetUserByIdParams) {
       totalQuestions,
       totalReplies,
     };
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function getUserQuestions(params: GetUserStatsParams) {
+  try {
+    connectToDb();
+
+    const { userId, page = 1, pageSize = 10 } = params;
+
+    const totalQuestions = await Question.countDocuments({
+      author: userId,
+    });
+
+    const userQuestions = await Question.find({
+      author: userId,
+    })
+      .sort({ view: -1, upvotes: -1 })
+      .populate('tags', '_id name')
+      .populate('author', '_id clerkId name avatar');
+
+    return { totalQuestions, questions: userQuestions };
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function getUserReplies(params: GetUserStatsParams) {
+  try {
+    connectToDb();
+
+    const { userId, page = 1, pageSize = 10 } = params;
+
+    const totalReplies = await Answer.countDocuments({
+      author: userId,
+    });
+
+    const userReplies = await Answer.find({
+      author: userId,
+    })
+      .sort({ upvotes: -1 })
+      .populate('question', '_id title')
+      .populate('author', '_id clerkId name avatar');
+
+    return { totalReplies, replies: userReplies };
   } catch (error) {
     console.log(error);
   }

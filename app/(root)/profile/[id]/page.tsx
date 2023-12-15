@@ -8,6 +8,9 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 import ProfileURLs from './components/ProfileURLs';
+import Stats from './components/Stats';
+import PostsTab from './components/PostsTab';
+import ReplyTab from './components/ReplyTab';
 
 const page = async ({ params, searchParams }: URLProps) => {
   const { userId: clerkId } = auth();
@@ -60,20 +63,27 @@ const page = async ({ params, searchParams }: URLProps) => {
         </div>
       </div>
 
-      {/* user stats */}
+      <Stats
+        totalQuestions={userData!.totalQuestions}
+        totalReplies={userData!.totalReplies}
+      />
 
       <div className="mt-10 flex gap-10">
         <Tabs defaultValue="top-posts" className="flex-1">
           <TabsList className="background-light-800_dark-400 min-h-[42px] p-1">
             <TabsTrigger value="top-posts" className="tab">
-              Top Posts
+              post
             </TabsTrigger>
             <TabsTrigger value="answers" className="tab">
               Answers
             </TabsTrigger>
           </TabsList>
-          <TabsContent value="top-posts">Posts</TabsContent>
-          <TabsContent value="answers">Answers</TabsContent>
+          <TabsContent value="top-posts">
+            <PostsTab searchParams={searchParams} userId={userData?.user._id} />
+          </TabsContent>
+          <TabsContent value="answers" className="flex w-full flex-col gap-6">
+            <ReplyTab searchParams={searchParams} userId={userData?.user._id} />
+          </TabsContent>
         </Tabs>
       </div>
     </>
