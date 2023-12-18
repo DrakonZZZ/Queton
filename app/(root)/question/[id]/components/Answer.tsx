@@ -31,6 +31,7 @@ export const Answer = ({ authorId, question, questionId }: AnswerProps) => {
   });
 
   const handleCreateAnswer = async (values: z.infer<typeof AnswerSchema>) => {
+    console.log('working');
     setIsSubmitting(true);
 
     try {

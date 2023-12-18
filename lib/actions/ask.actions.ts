@@ -9,6 +9,7 @@ import {
   GetQuestionByIdParams,
   QuestionVoteParams,
   DeleteQuestionParams,
+  EditPostParams,
 } from './shared.types';
 import User from '../db/models/user.model';
 import { revalidatePath } from 'next/cache';
@@ -185,7 +186,22 @@ export async function deleteQuestion(params: DeleteQuestionParams) {
   }
 }
 
-export interface DeleteReplyParams {
-  replyId: string;
-  path: string;
+export async function editPost(params: EditPostParams) {
+  try {
+    connectToDb();
+
+    const { questionId, title, content, path } = params;
+    const question = await Question.findById(questionId).populate('tags');
+
+    if (!question) {
+      throw new Error('Question not found');
+    }
+
+    question.title = title;
+    question.content = content;
+
+    await question.save();
+
+    revalidatePath(path);
+  } catch (error) {}
 }

@@ -131,3 +131,15 @@ export interface DeleteQuestionParams {
   questionId: string;
   path: string;
 }
+
+export interface DeleteReplyParams {
+  replyId: string;
+  path: string;
+}
+
+export interface EditPostParams {
+  questionId: string;
+  title: string;
+  content: string;
+  path: string;
+}
