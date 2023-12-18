@@ -6,10 +6,12 @@ import { BiUpvote, BiComment } from 'react-icons/bi';
 import { AiOutlineEye } from 'react-icons/ai';
 import AvatarCard from './stats/AvatarCard';
 import { timeStamp } from '@/lib/timeformat';
+import { SignedIn, auth } from '@clerk/nextjs';
+import EditActions from './EditActions';
 
 interface QuestionProps {
   id: number;
-  clerkId?: string;
+  clerkId?: string | null;
   title: string;
   author: { clerkId: string; name: string; avatar: string };
   upvotes: number;
@@ -30,9 +32,10 @@ const QuestionCard = ({
   createAt,
   tags,
 }: QuestionProps) => {
+  const showActionsButtons = clerkId && clerkId === author.clerkId;
   return (
     <div className="border border-black/10 dark:border-white/20 rounded-md p-8 sm:px-10">
-      <div className="flex flex-col-reverse items-start justify-between gap-2 ">
+      <div className="flex items-center justify-between  gap-2 ">
         <span className="md:hidden subtle-regular text-dark-400_light-700 line-clamp-1">
           {timeStamp(createAt)}
         </span>
@@ -41,8 +44,12 @@ const QuestionCard = ({
             {title}
           </h3>
         </Link>
+        <SignedIn>
+          {showActionsButtons && (
+            <EditActions type="post" itemId={JSON.stringify(id)} />
+          )}
+        </SignedIn>
       </div>
-      {/* Editable button if signed in */}
 
       <div className="mt-3.5 flex flex-wrap gap-1">
         {tags.map((tag) => {

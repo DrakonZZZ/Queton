@@ -8,6 +8,8 @@ import {
   CreateAnswerParams,
   GetAnswersParams,
 } from './shared.types';
+import { DeleteReplyParams } from './ask.actions';
+import DisplayAction from '../db/models/displayAction.model';
 
 export async function createAnswer(params: CreateAnswerParams) {
   connectToDb();
@@ -118,5 +120,31 @@ export async function downvoteAnswer(params: AnswerVoteParams) {
   } catch (error) {
     console.log(error);
     throw error;
+  }
+}
+
+export async function deleteReply(params: DeleteReplyParams) {
+  try {
+    connectToDb();
+
+    const { replyId, path } = params;
+
+    const reply = await Answer.findById({ replyId });
+
+    if (!reply) {
+      throw new Error('Answer not found');
+    }
+
+    await Answer.deleteOne({ _id: replyId });
+    await Question.updateMany(
+      { _id: reply.question },
+      { $pull: { replies: replyId } }
+    );
+
+    await DisplayAction.deleteMany({ replies: replyId });
+
+    revalidatePath(path);
+  } catch (error) {
+    console.log(error);
   }
 }

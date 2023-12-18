@@ -4,14 +4,15 @@ import { SearchParamsProps } from '@/types';
 
 interface ReplyTabProps extends SearchParamsProps {
   userId: string;
+  clerkId?: string | null;
 }
 
-const ReplyTab = async ({ searchParams, userId }: ReplyTabProps) => {
+const ReplyTab = async ({ searchParams, userId, clerkId }: ReplyTabProps) => {
   const data = await getUserReplies({ userId, page: 1 });
   return (
     <>
       {data?.replies.map((r) => {
-        const { _id, clerkId, question, author, upvotes, createdAt } = r;
+        const { _id, question, author, upvotes, createdAt, view } = r;
         return (
           <div className="my-4" key={_id}>
             <ReplyCard
@@ -21,6 +22,7 @@ const ReplyTab = async ({ searchParams, userId }: ReplyTabProps) => {
               question={question}
               upvotes={upvotes.length}
               createdAt={createdAt}
+              view={view}
             />
           </div>
         );

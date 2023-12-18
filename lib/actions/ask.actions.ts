@@ -8,9 +8,12 @@ import {
   GetQuestionsParams,
   GetQuestionByIdParams,
   QuestionVoteParams,
+  DeleteQuestionParams,
 } from './shared.types';
 import User from '../db/models/user.model';
 import { revalidatePath } from 'next/cache';
+import Answer from '../db/models/answer.model';
+import DisplayAction from '../db/models/displayAction.model';
 
 export async function getQuestions(params: GetQuestionsParams) {
   try {
@@ -159,4 +162,30 @@ export async function downvoteQuestion(params: QuestionVoteParams) {
     console.log(error);
     throw error;
   }
+}
+
+export async function deleteQuestion(params: DeleteQuestionParams) {
+  try {
+    connectToDb();
+
+    const { questionId, path } = params;
+
+    await Question.deleteOne({ _id: questionId });
+    await Answer.deleteMany({ question: questionId });
+    await DisplayAction.deleteMany({ question: questionId });
+
+    await Tag.updateMany(
+      { questions: questionId },
+      { $pull: { questions: questionId } }
+    );
+
+    revalidatePath(path);
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export interface DeleteReplyParams {
+  replyId: string;
+  path: string;
 }

@@ -11,7 +11,7 @@ const Stats = ({ totalQuestions, totalReplies }: StatProp) => {
     <div className="mt-10">
       <h4 className="hs-semibold text-black dark:text-white">Stats</h4>
       <div className="mt-5 grid grid-cols-1 gap-5 xs:grid-cols-2 md:grid-cols-4">
-        <div className="flex flex-wrap items-center justify-evenly gap-4 border border-black/10 dark:border-white/20 rounded-md p-6 shadow-light300 dark:shadow-dark-200">
+        <div className="flex flex-wrap items-center gap-4 border border-black/10 dark:border-white/20 rounded-md p-6 shadow-light300 dark:shadow-dark-200">
           <div className="paragraph-semibold text-black dark:text-white">
             <p>{abbreviateNumber(totalQuestions)}</p>
             <p className="body-medium text-black/60 dark:text-white">
@@ -19,7 +19,7 @@ const Stats = ({ totalQuestions, totalReplies }: StatProp) => {
             </p>
           </div>
         </div>
-        <div className="flex flex-wrap items-center justify-evenly gap-4 border border-black/10 dark:border-white/20 rounded-md p-6 shadow-light300 dark:shadow-dark-200">
+        <div className="flex flex-wrap items-center gap-4 border border-black/10 dark:border-white/20 rounded-md p-6 shadow-light300 dark:shadow-dark-200">
           <div className="paragraph-semibold text-black dark:text-white">
             <p>{abbreviateNumber(totalReplies)}</p>
             <p className="body-medium text-black/60 dark:text-white">Replies</p>

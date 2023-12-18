@@ -1,9 +1,15 @@
 import { timeStamp } from '@/lib/timeformat';
 import Link from 'next/link';
+import AvatarCard from './stats/AvatarCard';
+import Metric from './stats/Metric';
+import { BiComment, BiUpvote } from 'react-icons/bi';
+import { AiOutlineEye } from 'react-icons/ai';
+import { SignedIn } from '@clerk/nextjs';
+import EditActions from './EditActions';
 
 interface ReplyCardProp {
   id: number;
-  clerkId?: string;
+  clerkId?: string | null;
   question: {
     _id: string;
     title: string;
@@ -11,6 +17,7 @@ interface ReplyCardProp {
   author: { clerkId: string; name: string; avatar: string };
   upvotes: number;
   createdAt: Date;
+  view: number;
 }
 
 const ReplyCard = ({
@@ -20,19 +27,31 @@ const ReplyCard = ({
   author,
   upvotes,
   createdAt,
+  view,
 }: ReplyCardProp) => {
-  console.log(timeStamp(createdAt));
+  console.log(clerkId);
+  const showActionsButtons = clerkId && clerkId === author.clerkId;
   return (
-    <Link href={`/question/${question._id}/#${id}`}>
-      <div className="flex flex-col-reverse items-start justify-between gap-5 sm:flex-row border border-black/10 dark:border-white/20 rounded-md p-8 sm:px-10">
-        <span className="subtle-regular line-clamp-1 flex">
-          {timeStamp(createdAt)}
-        </span>
-        <h3 className="sm:h3-semibold base-semibold dark:bg-white dark:text-black line-clamp-1 flex-1">
+    <div className="flex flex-col-reverse items-center justify-between gap-5 sm:flex-row border border-black/10 dark:border-white/20 rounded-md p-6 sm:px-10">
+      <AvatarCard
+        imgSrc={author.avatar}
+        author={author.name}
+        isAuthor={true}
+        href={`/profile/${author.clerkId}`}
+        title={` - ${timeStamp(createdAt)}`}
+      />
+      <Link href={`/question/${question._id}/#${id}`}>
+        <h3 className="sm:h4-semibold base-semibold dark:bg-white dark:text-black line-clamp-1 flex-1">
           {question.title}
         </h3>
-      </div>
-    </Link>
+      </Link>
+
+      <SignedIn>
+        {showActionsButtons && (
+          <EditActions type="reply" itemId={JSON.stringify(id)} />
+        )}
+      </SignedIn>
+    </div>
   );
 };
 
