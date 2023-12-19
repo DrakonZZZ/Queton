@@ -10,6 +10,7 @@ import {
   GetSavedQuestionsParams,
   GetUserByIdParams,
   GetUserStatsParams,
+  ProfileUpdateParams,
   SavedQuestionParams,
   UpdateUserParams,
 } from './shared.types';

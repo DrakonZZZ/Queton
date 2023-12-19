@@ -24,7 +24,7 @@ export const Answer = ({ authorId, question, questionId }: AnswerProps) => {
   const editorRef = useRef(null);
 
   const form = useForm<z.infer<typeof AnswerSchema>>({
-    resolver: zodResolver(AnswerSchema),
+    resolver: zodResolver(AnswerSchema), 
     defaultValues: {
       answer: '',
     },

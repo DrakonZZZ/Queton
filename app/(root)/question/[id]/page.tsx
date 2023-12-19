@@ -12,9 +12,9 @@ import Tag from '@/components/Tag';
 import { Answer } from './components/Answer';
 import { auth } from '@clerk/nextjs';
 import { getUserById } from '@/lib/actions/user.action';
-import AllReplies from './components/AllReplies';
 import Votes from '@/components/Votes';
 import { URLProps } from '@/types';
+import AllReplies from './components/AllReplies';
 
 const page = async ({ params, searchParams }: URLProps) => {
   const result = await getQuestionsById({ questionId: params.id });
