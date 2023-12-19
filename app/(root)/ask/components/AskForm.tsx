@@ -35,30 +35,32 @@ const AskForm = ({ dbUserId, type, postDetails }: AskProps) => {
   const router = useRouter();
   const pathname = usePathname();
 
-  const parsedPostDetails = JSON.parse(postDetails || ' ');
+  console.log(postDetails);
+  const parsedPostDetails = postDetails && JSON.parse(postDetails || '');
 
-  const tagCollection = parsedPostDetails.tags.map((tag: any) => tag.name);
+  const tagCollection = parsedPostDetails?.tags.map((tag: any) => tag.name);
   //for button type
 
   const form = useForm<z.infer<typeof AskSchema>>({
     resolver: zodResolver(AskSchema),
     defaultValues: {
-      title: parsedPostDetails.title || '',
-      description: parsedPostDetails.content || '',
+      title: parsedPostDetails?.title || '',
+      description: parsedPostDetails?.content || '',
       tags: tagCollection || [],
     },
   });
 
   async function onSubmit(values: z.infer<typeof AskSchema>) {
+    console.log('working');
     setSubmitting(true);
     try {
-      await editPost({
-        questionId: parsedPostDetails._id,
-        title: values.title,
-        content: values.description,
-        path: pathname,
-      });
       if (type === 'edit') {
+        await editPost({
+          questionId: parsedPostDetails._id,
+          title: values.title,
+          content: values.description,
+          path: pathname,
+        });
         router.push(`/question/${parsedPostDetails._id}`);
       } else {
         //api call to backend containing all form data
@@ -161,7 +163,7 @@ const AskForm = ({ dbUserId, type, postDetails }: AskProps) => {
                   }
                   onBlur={field.onBlur}
                   onEditorChange={(content) => field.onChange(content)}
-                  initialValue={parsedPostDetails.content || ''}
+                  initialValue={parsedPostDetails?.content || ''}
                   init={{
                     height: 300,
                     menubar: false,

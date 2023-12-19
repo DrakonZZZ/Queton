@@ -8,7 +8,7 @@ import {
   CreateAnswerParams,
   GetAnswersParams,
 } from './shared.types';
-import { DeleteReplyParams } from './ask.actions';
+import { DeleteReplyParams } from './shared.types';
 import DisplayAction from '../db/models/displayAction.model';
 
 export async function createAnswer(params: CreateAnswerParams) {
@@ -21,8 +21,6 @@ export async function createAnswer(params: CreateAnswerParams) {
       content,
       question,
     });
-
-
 
     await Question.findByIdAndUpdate(question, {
       $push: { replies: newAnswer._id },

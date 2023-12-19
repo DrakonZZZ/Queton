@@ -2,16 +2,18 @@ import Link from 'next/link';
 import { RiArrowRightSLine } from 'react-icons/ri';
 import SideTags from './SideTags';
 import { getPopularPost } from '@/lib/actions/ask.actions';
+import { getPopularTags } from '@/lib/actions/tag.actions';
 
 const Rightbar = async () => {
   const popularPosts = await getPopularPost();
+  const popularTags = await getPopularTags();
+
   return (
     <section className="hidden lg:block md:w-[18rem] xl:w-[26rem] min-h-full pt-24 border-l border-black/10 dark:border-white/20">
       <div className="w-full p-4">
         <h2 className="h3-bold dark:text-white mb-4">Top Questions</h2>
         <div className="h-full flex flex-col gap-4 overflow-y-auto">
           {popularPosts?.map((item, idx) => {
-            const id = 1;
             return (
               <Link
                 href={`/question/${item?._id}`}
@@ -30,14 +32,14 @@ const Rightbar = async () => {
       <div className="w-full p-4">
         <h2 className="h3-bold dark:text-white mb-4">Popular Tag</h2>
         <div className="h-full flex flex-col gap-4 dark:text-white">
-          {new Array(4).fill(1).map((item, idx) => {
+          {popularTags?.map((item, idx) => {
             return (
               <SideTags
                 key={idx}
-                _id={1}
-                title="title"
+                _id={item._id}
+                title={item.name}
                 topicCount={true}
-                totlaQuestions={4}
+                totlaQuestions={item.numberOfPosts}
                 addonClasses="dark:text-white/60"
               />
             );
