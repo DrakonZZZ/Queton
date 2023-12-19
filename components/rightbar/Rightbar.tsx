@@ -2,7 +2,8 @@ import Link from 'next/link';
 import { RiArrowRightSLine } from 'react-icons/ri';
 import SideTags from './SideTags';
 
-const Rightbar = () => {
+const Rightbar = async () => {
+  // const popularPosts = await getPopularPost({});
   return (
     <section className="hidden lg:block md:w-[18rem] xl:w-[26rem] min-h-full pt-24 border-l border-black/10 dark:border-white/20">
       <div className="w-full p-4">

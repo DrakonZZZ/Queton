@@ -8,7 +8,7 @@ import { SkinProvider } from '@/context/skinProvider';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Quetone',
+  title: 'Queton',
   description: 'Ask questions to your hearts content',
 };
 

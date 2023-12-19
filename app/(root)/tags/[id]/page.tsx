@@ -2,11 +2,22 @@ import NoResults from '@/components/NoResults';
 import QuestionCard from '@/components/QuestionCard';
 import Searchbar from '@/components/Searchbar';
 import { getQuesitonsByTagId } from '@/lib/actions/tag.actions';
-import { IQuestions } from '@/lib/db/models/question.model';
+import { URLProps } from '@/types';
 import React from 'react';
 import { BiSearch } from 'react-icons/bi';
 
-const TagIdPage = async ({ params, searchParams }) => {
+interface Question {
+  id: string;
+  title: string;
+  author: { clerkId: string; name: string; avatar: string };
+  upvotes: string;
+  view: number;
+  createdAt: Date;
+  tags: { id: number; name: string; _id: string }[];
+  replies: string[];
+}
+
+const TagIdPage = async ({ params, searchParams }: URLProps) => {
   const data = await getQuesitonsByTagId({
     tagId: params.id,
     page: 1,
@@ -31,7 +42,7 @@ const TagIdPage = async ({ params, searchParams }) => {
 
         <div className="w-full mt-10 flex flex-col gap-6">
           {data.questions.length > 0 ? (
-            data.questions.map((q: IQuestions) => {
+            data.questions.map((q: Question) => {
               const {
                 id,
                 title,
