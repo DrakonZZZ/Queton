@@ -10,7 +10,7 @@ import { SignedIn, auth } from '@clerk/nextjs';
 import EditActions from './EditActions';
 
 interface QuestionProps {
-  id: number;
+  id: string;
   clerkId?: string | null;
   title: string;
   author: { clerkId: string; name: string; avatar: string };

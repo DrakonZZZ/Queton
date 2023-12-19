@@ -24,14 +24,13 @@ export const Answer = ({ authorId, question, questionId }: AnswerProps) => {
   const editorRef = useRef(null);
 
   const form = useForm<z.infer<typeof AnswerSchema>>({
-    resolver: zodResolver(AnswerSchema), 
+    resolver: zodResolver(AnswerSchema),
     defaultValues: {
       answer: '',
     },
   });
 
   const handleCreateAnswer = async (values: z.infer<typeof AnswerSchema>) => {
-    console.log('working');
     setIsSubmitting(true);
 
     try {

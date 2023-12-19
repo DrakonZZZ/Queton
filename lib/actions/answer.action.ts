@@ -22,7 +22,7 @@ export async function createAnswer(params: CreateAnswerParams) {
       question,
     });
 
-    console.log(newAnswer);
+
 
     await Question.findByIdAndUpdate(question, {
       $push: { replies: newAnswer._id },

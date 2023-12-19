@@ -7,6 +7,17 @@ import { getSavedQuesions } from '@/lib/actions/user.action';
 import { BiSearch } from 'react-icons/bi';
 import { auth } from '@clerk/nextjs';
 
+interface Question {
+  id: string;
+  title: string;
+  author: { clerkId: string; name: string; avatar: string };
+  upvotes: string;
+  view: number;
+  createdAt: Date;
+  tags: { id: number; name: string; _id: string }[];
+  replies: string[];
+}
+
 const Collection = async () => {
   const { userId } = auth();
 
@@ -36,7 +47,7 @@ const Collection = async () => {
 
         <div className="w-full mt-10 flex flex-col gap-6">
           {data.length > 0 ? (
-            data.map((q) => {
+            data.map((q: Question) => {
               const {
                 id,
                 title,

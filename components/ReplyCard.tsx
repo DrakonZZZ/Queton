@@ -29,7 +29,6 @@ const ReplyCard = ({
   createdAt,
   view,
 }: ReplyCardProp) => {
-  console.log(clerkId);
   const showActionsButtons = clerkId && clerkId === author.clerkId;
   return (
     <div className="flex flex-col-reverse items-center justify-between gap-5 sm:flex-row border border-black/10 dark:border-white/20 rounded-md p-6 sm:px-10">
