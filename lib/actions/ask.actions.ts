@@ -205,3 +205,15 @@ export async function editPost(params: EditPostParams) {
     revalidatePath(path);
   } catch (error) {}
 }
+
+export async function getPopularPost() {
+  try {
+    const popularPosts = await Question.find({}).sort({
+      views: -1,
+      upvotes: -1,
+    });
+    return popularPosts;
+  } catch (error) {
+    console.log(error);
+  }
+}
