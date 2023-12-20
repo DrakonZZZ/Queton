@@ -48,7 +48,7 @@ const Searchbar = ({
           router.push(urlUpdate, { scroll: false });
         }
       }
-    }, 2000);
+    }, 1000);
 
     return () => clearTimeout(debounceInput);
   }, [search, searchParams, router, pathname, query]);

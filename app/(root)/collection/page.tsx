@@ -6,6 +6,7 @@ import QuestionCard from '@/components/QuestionCard';
 import { getSavedQuesions } from '@/lib/actions/user.action';
 import { BiSearch } from 'react-icons/bi';
 import { auth } from '@clerk/nextjs';
+import { SearchParamsProps } from '@/types';
 
 interface Question {
   id: string;
@@ -18,11 +19,15 @@ interface Question {
   replies: string[];
 }
 
-const Collection = async () => {
+const Collection = async ({ searchParams }: SearchParamsProps) => {
   const { userId } = auth();
 
   if (!userId) return null;
-  const data = await getSavedQuesions({ clerkId: userId });
+
+  const data = await getSavedQuesions({
+    clerkId: userId,
+    searchQuery: searchParams.q,
+  });
 
   return (
     <>
@@ -30,7 +35,7 @@ const Collection = async () => {
       <div className="mt-10 flex flex-col gap-5">
         <div className="w-full flex justify-between sm:items-center">
           <Searchbar
-            route="/"
+            route="/community"
             addOnClasses="flex-1"
             iconCord="left"
             icontype={

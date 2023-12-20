@@ -30,7 +30,7 @@ const TagIdPage = async ({ params, searchParams }: URLProps) => {
       <div className="w-full mt-11">
         <div className="w-full flex justify-between sm:items-center">
           <Searchbar
-            route="/"
+            route={`/tags/${params.id}`}
             addOnClasses="flex-1"
             iconCord="left"
             icontype={

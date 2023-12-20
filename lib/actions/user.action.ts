@@ -95,8 +95,21 @@ export async function getAllUsers(params: GetAllUsersParams) {
     connectToDb();
 
     // const {page = 1, pageSize = 10, filter, searchQuery} = params;
+    const { searchQuery } = params;
 
-    const users = await User.find({}).sort({ createdAt: -1 });
+    const query: FilterQuery<typeof User> = {};
+
+    if (searchQuery) {
+      query.$or = [
+        {
+          name: { $regex: new RegExp(searchQuery, 'i') },
+        },
+        {
+          username: { $regex: new RegExp(searchQuery, 'i') },
+        },
+      ];
+    }
+    const users = await User.find(query).sort({ createdAt: -1 });
 
     return users;
   } catch (error) {
@@ -151,17 +164,19 @@ export async function getSavedQuesions(params: GetSavedQuestionsParams) {
       ? { title: { $regex: new RegExp(searchQuery, 'i') } }
       : {};
 
-    const user = await User.findOne({ clerkId }).populate({
-      path: 'saved',
-      match: query,
-      options: {
-        sort: { createAt: -1 },
-      },
-      populate: [
-        { path: 'tags', model: Tag, select: '_id name' },
-        { path: 'author', model: User, select: '_id clerkId name avatar' },
-      ],
-    });
+    const user = await User.findOne({ clerkId })
+      .populate({
+        path: 'saved',
+        match: query,
+        options: {
+          sort: { createdAt: -1 },
+        },
+        populate: [
+          { path: 'tags', model: Tag, select: '_id name' },
+          { path: 'author', model: User, select: '_id clerkId name avatar' },
+        ],
+      })
+      .sort({ createdAt: -1 });
 
     if (!user) {
       throw new Error('User not found');

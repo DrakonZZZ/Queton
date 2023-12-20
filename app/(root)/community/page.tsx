@@ -5,9 +5,10 @@ import { BiSearch } from 'react-icons/bi';
 import { getAllUsers } from '@/lib/actions/user.action';
 import Link from 'next/link';
 import AvatarCard from './components/AvatarCard';
+import { SearchParamsProps } from '@/types';
 
-const Page = async () => {
-  const result = await getAllUsers({});
+const Page = async ({ searchParams }: SearchParamsProps) => {
+  const result = await getAllUsers({ searchQuery: searchParams.q });
   return (
     <>
       <h1 className="h1-bold text-dark-100_light-900">All Questions</h1>

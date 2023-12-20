@@ -36,8 +36,6 @@ export async function getQuestions(params: GetQuestionsParams) {
       ];
     }
 
-    console.log(query);
-
     const questions = await Question.find(query)
       .populate({ path: 'tags', model: Tag })
       .populate({ path: 'author', model: User })
