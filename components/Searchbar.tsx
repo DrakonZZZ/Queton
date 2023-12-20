@@ -1,4 +1,9 @@
+'use client';
+
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { Input } from './ui/input';
+import { useEffect, useState } from 'react';
+import { removeQueryKeys, searchQuery } from '@/lib/query';
 
 interface SearchbarProps {
   route: string;
@@ -15,6 +20,39 @@ const Searchbar = ({
   placeHolder,
   icontype,
 }: SearchbarProps) => {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  const query = searchParams.get('q');
+
+  const [search, setSearch] = useState(query || '');
+
+  useEffect(() => {
+    const debounceInput = setTimeout(() => {
+      if (search) {
+        const urlChange = searchQuery({
+          params: searchParams.toString(),
+          key: 'q',
+          value: search,
+        });
+
+        router.push(urlChange, { scroll: false });
+      } else {
+        if (pathname === route) {
+          const urlUpdate = removeQueryKeys({
+            params: searchParams.toString(),
+            removekeys: ['q'],
+          });
+
+          router.push(urlUpdate, { scroll: false });
+        }
+      }
+    }, 2000);
+
+    return () => clearTimeout(debounceInput);
+  }, [search, searchParams, router, pathname, query]);
+  console.log(query);
   return (
     <div
       className={`${addOnClasses} flex relative min-h-[56px] grow w-full items-center gap-4`}
@@ -24,7 +62,8 @@ const Searchbar = ({
           <Input
             type="text"
             placeholder={placeHolder}
-            // value=""
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
             className="paragraph-regular placholder border-none shadow-none outline-none no-focus dark:text-white"
           />
           {icontype}
