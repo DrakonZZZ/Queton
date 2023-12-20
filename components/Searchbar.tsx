@@ -52,7 +52,7 @@ const Searchbar = ({
 
     return () => clearTimeout(debounceInput);
   }, [search, searchParams, router, pathname, query]);
-  console.log(query);
+
   return (
     <div
       className={`${addOnClasses} flex relative min-h-[56px] grow w-full items-center gap-4`}

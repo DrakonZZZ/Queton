@@ -9,9 +9,13 @@ import { questions } from '@/constants/questions';
 import NoResults from '@/components/NoResults';
 import QuestionCard from '@/components/QuestionCard';
 import { getQuestions } from '@/lib/actions/ask.actions';
+import { SearchParamsProps } from '@/types';
 
-const Home = async () => {
-  const data = await getQuestions({});
+const Home = async ({ searchParams }: SearchParamsProps) => {
+  const data = await getQuestions({
+    searchQuery: searchParams.q,
+  });
+
   return (
     <>
       <div className="w-full flex justify-between flex-col-reverse gap-4 sm:flex-row">
