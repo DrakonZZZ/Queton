@@ -24,7 +24,7 @@ const Filter = ({ options, containerClasses, addOnClasses }: FilterProps) => {
             <SelectValue placeholder="Filter Selection" />
           </div>
         </SelectTrigger>
-        <SelectContent>
+        <SelectContent className="bg-white dark:bg-black dark:text-white dark:border-white/20">
           <SelectGroup>
             {options.map((item, idx) => {
               const { name, value } = item;

@@ -20,44 +20,61 @@ import { Editor } from '@tinymce/tinymce-react';
 
 import { AskSchema } from '@/lib/validators';
 import Tag from '@/components/Tag';
-import { askQuestion } from '@/lib/actions/ask.actions';
+import { askQuestion, editPost } from '@/lib/actions/ask.actions';
 
 interface AskProps {
+  type?: string;
   dbUserId: string;
+  postDetails?: string;
 }
 
-const AskForm = ({ dbUserId }: AskProps) => {
+const AskForm = ({ dbUserId, type, postDetails }: AskProps) => {
   const [isSubmitting, setSubmitting] = useState(false);
   // editor reference
   const editorRef = useRef(null);
   const router = useRouter();
   const pathname = usePathname();
 
+  console.log(postDetails);
+  const parsedPostDetails = postDetails && JSON.parse(postDetails || '');
+
+  const tagCollection = parsedPostDetails?.tags.map((tag: any) => tag.name);
   //for button type
-  const type: any = 'create';
 
   const form = useForm<z.infer<typeof AskSchema>>({
     resolver: zodResolver(AskSchema),
     defaultValues: {
-      title: '',
-      description: '',
-      tags: [],
+      title: parsedPostDetails?.title || '',
+      description: parsedPostDetails?.content || '',
+      tags: tagCollection || [],
     },
   });
 
   async function onSubmit(values: z.infer<typeof AskSchema>) {
+    console.log('working');
     setSubmitting(true);
     try {
-      //api call to backend containing all form data
-      await askQuestion({
-        title: values.title,
-        content: values.description,
-        tags: values.tags,
-        author: JSON.parse(dbUserId),
-        path: pathname,
-      });
-      //redirect to home page
-      router.push('/');
+      if (type === 'edit') {
+        await editPost({
+          questionId: parsedPostDetails._id,
+          title: values.title,
+          content: values.description,
+          path: pathname,
+        });
+        router.push(`/question/${parsedPostDetails._id}`);
+      } else {
+        //api call to backend containing all form data
+        await askQuestion({
+          title: values.title,
+          content: values.description,
+          tags: values.tags,
+          author: JSON.parse(dbUserId),
+          path: pathname,
+        });
+
+        //redirect to home page
+        router.push('/');
+      }
     } catch (error) {
     } finally {
       setSubmitting(false);
@@ -146,18 +163,36 @@ const AskForm = ({ dbUserId }: AskProps) => {
                   }
                   onBlur={field.onBlur}
                   onEditorChange={(content) => field.onChange(content)}
-                  initialValue=""
+                  initialValue={parsedPostDetails?.content || ''}
                   init={{
                     height: 300,
                     menubar: false,
                     plugins: [
-                      'advlist autolink lists link image charmap print preview anchor',
-                      'searchreplace visualblocks code fullscreen',
-                      'insertdatetime media table paste code help wordcount',
+                      'advlist',
+                      'autolink',
+                      'lists',
+                      'link',
+                      'image',
+                      'charmap',
+                      'print',
+                      'preview',
+                      'anchor',
+                      'searchreplace',
+                      'visualblocks',
+                      'code',
+                      'fullscreen',
+                      'insertdatetime',
+                      'media',
+                      'table',
+                      'paste',
+                      'code',
+                      'help',
+                      'wordcount',
+                      'codesample',
                     ],
                     toolbar:
                       'undo redo | formatselect | ' +
-                      'bold italic forecolor | alignleft aligncenter ' +
+                      'codesample | bold italic forecolor | alignleft aligncenter ' +
                       'alignright alignjustify | bullist numlist outdent indent | ' +
                       'removeformat ',
                     content_style:
@@ -185,6 +220,7 @@ const AskForm = ({ dbUserId }: AskProps) => {
               <FormControl className="mt-3.5">
                 <>
                   <Input
+                    disabled={type === 'edit'}
                     onKeyDown={(e) => handleInputKeyDown(e, field)}
                     placeholder="Tags here..."
                     className="min-h-[48px] paragraph-regular no-focus  text-dark-300_light-700 border-black/20 dark:border-white/30"
@@ -195,7 +231,11 @@ const AskForm = ({ dbUserId }: AskProps) => {
                         return (
                           <div
                             key={tag}
-                            onClick={() => handleTagRemove(tag, field)}
+                            onClick={() =>
+                              type !== 'edit'
+                                ? handleTagRemove(tag, field)
+                                : () => {}
+                            }
                           >
                             <Tag
                               title={tag}

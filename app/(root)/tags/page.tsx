@@ -5,17 +5,17 @@ import { TagFilters } from '@/constants/filters';
 import NoResults from '@/components/NoResults';
 import { getAllTags } from '@/lib/actions/tag.actions';
 import Link from 'next/link';
+import { SearchParamsProps } from '@/types';
 
-const Page = async () => {
-  const result = await getAllTags({});
-  console.log(result);
+const Page = async ({ searchParams }: SearchParamsProps) => {
+  const result = await getAllTags({ searchQuery: searchParams.q });
   return (
     <>
       <h1 className="h1-bold text-dark-100_light-900">Tags</h1>
       <div className="mt-10 flex flex-col gap-5">
         <div className="w-full flex justify-between sm:items-center">
           <Searchbar
-            route="/community"
+            route="/tags"
             addOnClasses="flex-1"
             iconCord="left"
             icontype={

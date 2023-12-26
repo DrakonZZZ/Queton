@@ -18,7 +18,7 @@ export const sidebarLinks: SidebarLink[] = [
   },
   {
     route: '/collection',
-    label: 'Collections',
+    label: 'Collection',
     icon: <BiCollection className="h-6 w-6 mx-auto" />,
   },
   {

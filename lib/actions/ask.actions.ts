@@ -7,16 +7,39 @@ import {
   AskParams,
   GetQuestionsParams,
   GetQuestionByIdParams,
+  QuestionVoteParams,
+  DeleteQuestionParams,
+  EditPostParams,
 } from './shared.types';
 import User from '../db/models/user.model';
+import { revalidatePath } from 'next/cache';
+import Answer from '../db/models/answer.model';
+import DisplayAction from '../db/models/displayAction.model';
+import { FilterQuery } from 'mongoose';
 
 export async function getQuestions(params: GetQuestionsParams) {
   try {
     connectToDb();
 
-    const questions = await Question.find({})
+    const { searchQuery } = params;
+
+    const query: FilterQuery<typeof Question> = {};
+
+    if (searchQuery) {
+      query.$or = [
+        {
+          title: { $regex: new RegExp(searchQuery, 'i') },
+        },
+        {
+          content: { $regex: new RegExp(searchQuery, 'i') },
+        },
+      ];
+    }
+
+    const questions = await Question.find(query)
       .populate({ path: 'tags', model: Tag })
-      .populate({ path: 'author', model: User });
+      .populate({ path: 'author', model: User })
+      .sort({ createdAt: -1 });
 
     return questions;
   } catch (error) {
@@ -85,5 +108,129 @@ export async function getQuestionsById(params: GetQuestionByIdParams) {
   } catch (error) {
     console.log(error);
     throw error;
+  }
+}
+
+export async function upvoteQuestion(params: QuestionVoteParams) {
+  try {
+    connectToDb();
+
+    const { questionId, userId, hasdownVoted, hasupVoted, path } = params;
+
+    let updateQuery = {};
+
+    if (hasupVoted) {
+      updateQuery = {
+        $pull: { upvotes: userId },
+      };
+    } else if (hasdownVoted) {
+      updateQuery = {
+        $pull: { downvotes: userId },
+        $push: { upvotes: userId },
+      };
+    } else {
+      updateQuery = { $addToSet: { upvotes: userId } };
+    }
+
+    const question = await Question.findByIdAndUpdate(questionId, updateQuery, {
+      new: true,
+    });
+
+    if (!question) {
+      throw new Error('QUestions not found');
+    }
+
+    //increase user prestige points
+
+    revalidatePath(path);
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+export async function downvoteQuestion(params: QuestionVoteParams) {
+  const { questionId, userId, hasdownVoted, hasupVoted, path } = params;
+
+  let updateQuery = {};
+
+  if (hasdownVoted) {
+    updateQuery = { $pull: { downvotes: userId } };
+  } else if (hasupVoted) {
+    updateQuery = {
+      $pull: { upvotes: userId },
+      $push: { downvotes: userId },
+    };
+  } else {
+    updateQuery = { $addToSet: { downvotes: userId } };
+  }
+
+  const question = await Question.findByIdAndUpdate(questionId, updateQuery, {
+    new: true,
+  });
+
+  if (!question) {
+    throw new Error();
+  }
+
+  revalidatePath(path);
+  try {
+    connectToDb();
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+export async function deleteQuestion(params: DeleteQuestionParams) {
+  try {
+    connectToDb();
+
+    const { questionId, path } = params;
+
+    await Question.deleteOne({ _id: questionId });
+    await Answer.deleteMany({ question: questionId });
+    await DisplayAction.deleteMany({ question: questionId });
+
+    await Tag.updateMany(
+      { questions: questionId },
+      { $pull: { questions: questionId } }
+    );
+
+    revalidatePath(path);
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function editPost(params: EditPostParams) {
+  try {
+    connectToDb();
+
+    const { questionId, title, content, path } = params;
+    const question = await Question.findById(questionId).populate('tags');
+
+    if (!question) {
+      throw new Error('Question not found');
+    }
+
+    question.title = title;
+    question.content = content;
+
+    await question.save();
+
+    revalidatePath(path);
+  } catch (error) {}
+}
+
+export async function getPopularPost() {
+  try {
+    const popularPosts = await Question.find({}).sort({
+      views: -1,
+      upvotes: -1,
+    });
+    return popularPosts;
+  } catch (error) {
+    console.log(error);
   }
 }

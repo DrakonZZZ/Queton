@@ -1,38 +1,41 @@
 import Searchbar from '@/components/Searchbar';
-import { Button } from '@/components/ui/button';
-import { BiSearch } from 'react-icons/bi';
-import Link from 'next/link';
 import Filter from '@/components/Filter';
-import { HomePageFilters } from '@/constants/filters';
-import HomeFilter from './components/HomeFilter';
-import { questions } from '@/constants/questions';
+import { QuestionFilters } from '@/constants/filters';
 import NoResults from '@/components/NoResults';
 import QuestionCard from '@/components/QuestionCard';
-import { getQuestions } from '@/lib/actions/ask.actions';
+import { getSavedQuesions } from '@/lib/actions/user.action';
+import { BiSearch } from 'react-icons/bi';
+import { auth } from '@clerk/nextjs';
 import { SearchParamsProps } from '@/types';
 
-const Home = async ({ searchParams }: SearchParamsProps) => {
-  const data = await getQuestions({
+interface Question {
+  id: string;
+  title: string;
+  author: { clerkId: string; name: string; avatar: string };
+  upvotes: string;
+  view: number;
+  createdAt: Date;
+  tags: { id: number; name: string; _id: string }[];
+  replies: string[];
+}
+
+const Collection = async ({ searchParams }: SearchParamsProps) => {
+  const { userId } = auth();
+
+  if (!userId) return null;
+
+  const data = await getSavedQuesions({
+    clerkId: userId,
     searchQuery: searchParams.q,
   });
 
   return (
     <>
-      <div className="w-full flex justify-between flex-col-reverse gap-4 sm:flex-row">
-        <h1 className="h1-bold text-dark-100_light-900">All Questions</h1>
-        <Link
-          href={`/ask`}
-          className="flex justify-end max-sm:w-full gap-4 sm:flex-row"
-        >
-          <Button className="bg-black text-white dark:bg-white dark:text-black min-h-[30px] px-4 py-3 rounded-md hover:bg-black/70 dark:hover:bg-white/80 transistion">
-            Ask Anything
-          </Button>
-        </Link>
-      </div>
+      <h1 className="h1-bold text-dark-100_light-900">Saved Questions</h1>
       <div className="mt-10 flex flex-col gap-5">
         <div className="w-full flex justify-between sm:items-center">
           <Searchbar
-            route="/"
+            route="/community"
             addOnClasses="flex-1"
             iconCord="left"
             icontype={
@@ -41,16 +44,15 @@ const Home = async ({ searchParams }: SearchParamsProps) => {
             placeHolder="Search for questions"
           />
           <Filter
-            options={HomePageFilters}
+            options={QuestionFilters}
             addOnClasses="min-h-[40px] sm:min-w-[170px]"
             containerClasses="lg:hidden max-md:flex"
           />
         </div>
 
-        <HomeFilter />
         <div className="w-full mt-10 flex flex-col gap-6">
           {data.length > 0 ? (
-            data.map((q, idx) => {
+            data.map((q: Question) => {
               const {
                 id,
                 title,
@@ -77,9 +79,9 @@ const Home = async ({ searchParams }: SearchParamsProps) => {
             })
           ) : (
             <NoResults
-              title="There's no question to show"
-              link="/ask"
-              btnTitle="Start a thread"
+              title="No questions saved"
+              link="/"
+              btnTitle="Save"
               desc="Seize the opportunity to shatter the silence! Be the one to ask an intriguing question, igniting vibrant discussions and sparking
             engagement."
             />
@@ -90,4 +92,4 @@ const Home = async ({ searchParams }: SearchParamsProps) => {
   );
 };
 
-export default Home;
+export default Collection;
