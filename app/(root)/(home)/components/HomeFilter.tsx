@@ -1,7 +1,7 @@
 'use client';
 
 import { HomePageFilters } from '@/constants/filters';
-import { removeQueryKeys, searchQuery } from '@/lib/query';
+import { searchQuery } from '@/lib/query';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 
@@ -27,6 +27,7 @@ const HomeFilter = () => {
         key: 'filter',
         value: item.toLocaleLowerCase(),
       });
+      router.push(urlChange, { scroll: false });
     }
   };
 
@@ -47,7 +48,7 @@ const HomeFilter = () => {
                   ? 'text-black font-bold dark:text-white'
                   : 'text-black/70 dark:text-white/70  hover:text-black hover:font-bold dark:hover:text-white dark:hover:font-bold text-lg'
               }  cursor-pointer transition`}
-              onClick={() => handleFilterChange(value)}
+              onClickCapture={() => handleFilterChange(value)}
             >
               {name}
             </span>

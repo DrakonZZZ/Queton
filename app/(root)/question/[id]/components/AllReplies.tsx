@@ -11,8 +11,8 @@ interface AllRepliesProps {
   userId: string;
   questionId: string;
   totalReplies: number;
-  page?: number;
-  filter?: number;
+  page?: string;
+  filter?: string;
 }
 
 const AllReplies = async ({
@@ -24,16 +24,18 @@ const AllReplies = async ({
 }: AllRepliesProps) => {
   const result = await getAnswers({
     questionId,
+    page: page ? +page : 1,
+    sortBy: filter,
   });
 
   return (
     <div className="mt-8">
       <div className="flex items-center justify-between">
-        <h3 className="font-semibold">{totalReplies} Comments</h3>
         <Filter
           options={ReplyFilters}
           addOnClasses="min-h-[40px] sm:min-w-[170px]"
         />
+        <h3 className="font-semibold">{totalReplies} Comments</h3>
       </div>
       <div>
         {result.replies.map((reply) => {

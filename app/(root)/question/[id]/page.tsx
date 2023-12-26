@@ -107,6 +107,8 @@ const page = async ({ params, searchParams }: URLProps) => {
         userId={dbUser._id}
         questionId={result._id}
         totalReplies={result.replies.length}
+        page={searchParams?.page}
+        filter={searchParams?.filter}
       />
     </>
   );

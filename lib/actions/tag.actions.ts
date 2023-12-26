@@ -54,19 +54,21 @@ export async function getAllTags(params: GetAllTagsParams) {
 
     switch (filter) {
       case 'popular':
-        sortOptions = { joinedAt: -1 };
+        sortOptions = { questions: -1 };
         break;
       case 'recent':
-        sortOptions = { joinedAt: 1 };
+        sortOptions = { createAt: -1 };
         break;
       case 'name':
-        sortOptions = { level: -1 };
+        sortOptions = { name: 1 };
         break;
       case 'old':
-        sortOptions = { level: -1 };
+        sortOptions = { createdAt: 1 };
+      default:
+        break;
     }
 
-    const tags = await Tag.find(query);
+    const tags = await Tag.find(query).sort(sortOptions);
 
     return tags;
   } catch (error) {

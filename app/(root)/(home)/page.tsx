@@ -5,7 +5,6 @@ import Link from 'next/link';
 import Filter from '@/components/Filter';
 import { HomePageFilters } from '@/constants/filters';
 import HomeFilter from './components/HomeFilter';
-import { questions } from '@/constants/questions';
 import NoResults from '@/components/NoResults';
 import QuestionCard from '@/components/QuestionCard';
 import { getQuestions } from '@/lib/actions/ask.actions';
@@ -14,6 +13,7 @@ import { SearchParamsProps } from '@/types';
 const Home = async ({ searchParams }: SearchParamsProps) => {
   const data = await getQuestions({
     searchQuery: searchParams.q,
+    filter: searchParams.filter,
   });
 
   return (

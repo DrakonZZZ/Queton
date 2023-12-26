@@ -1,3 +1,5 @@
+'use client';
+
 import {
   Select,
   SelectContent,
@@ -6,6 +8,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { searchQuery } from '@/lib/query';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 interface FilterProps {
   options: { name: string; value: string }[];
@@ -14,9 +18,27 @@ interface FilterProps {
 }
 
 const Filter = ({ options, containerClasses, addOnClasses }: FilterProps) => {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
+  const paramFilter = searchParams.get('filter');
+
+  const handleOptionChange = (item: string) => {
+    const newUrl = searchQuery({
+      params: searchParams.toString(),
+      key: 'filter',
+      value: item,
+    });
+
+    router.push(newUrl, { scroll: false });
+  };
+
   return (
     <div className={`${containerClasses} relative px-4 md:px-0`}>
-      <Select>
+      <Select
+        onValueChange={(value) => handleOptionChange(value)}
+        defaultValue={paramFilter || undefined}
+      >
         <SelectTrigger
           className={`${addOnClasses} border-black/20 text-black/50 dark:border-white/30 dark:text-white`}
         >
