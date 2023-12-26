@@ -38,7 +38,7 @@ export async function getAllTags(params: GetAllTagsParams) {
   try {
     connectToDb();
 
-    const { searchQuery } = params;
+    const { searchQuery, filter } = params;
 
     const query: FilterQuery<typeof Tag> = {};
 
@@ -49,6 +49,23 @@ export async function getAllTags(params: GetAllTagsParams) {
         },
       ];
     }
+
+    let sortOptions = {};
+
+    switch (filter) {
+      case 'popular':
+        sortOptions = { joinedAt: -1 };
+        break;
+      case 'recent':
+        sortOptions = { joinedAt: 1 };
+        break;
+      case 'name':
+        sortOptions = { level: -1 };
+        break;
+      case 'old':
+        sortOptions = { level: -1 };
+    }
+
     const tags = await Tag.find(query);
 
     return tags;
