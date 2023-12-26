@@ -10,6 +10,7 @@ import {
   GetAllTagsParams,
   GetQuestionsByTagIdParams,
 } from './shared.types';
+import { skip } from 'node:test';
 
 export async function getAcivityTags(params: GetActivityTagsParams) {
   try {
@@ -38,8 +39,8 @@ export async function getAllTags(params: GetAllTagsParams) {
   try {
     connectToDb();
 
-    const { searchQuery, filter } = params;
-
+    const { searchQuery, filter, page = 1, pageSize = 10 } = params;
+    const skipPageAmount = (page - 1) * pageSize;
     const query: FilterQuery<typeof Tag> = {};
 
     if (searchQuery) {
@@ -68,9 +69,16 @@ export async function getAllTags(params: GetAllTagsParams) {
         break;
     }
 
-    const tags = await Tag.find(query).sort(sortOptions);
+    const totalTags = await Tag.countDocuments(query);
+    const tags = await Tag.find(query)
+      .skip(skipPageAmount)
+      .limit(pageSize)
+      .sort(sortOptions);
 
-    return tags;
+    const nextPage = totalTags > skipPageAmount + tags.length;
+
+    console.log(page);
+    return { tags, nextPage };
   } catch (error) {
     console.log(error);
     throw error;
@@ -82,6 +90,7 @@ export async function getQuesitonsByTagId(params: GetQuestionsByTagIdParams) {
     connectToDb();
 
     const { tagId, page = 1, pageSize = 10, searchQuery } = params;
+    const skipPageAmount = (page - 1) * pageSize;
 
     const tagFilter: FilterQuery<ITag> = { _id: tagId };
 
@@ -105,8 +114,8 @@ export async function getQuesitonsByTagId(params: GetQuestionsByTagIdParams) {
     }
 
     const questions = tag.questions;
-
-    return { tagTitle: tag.name, questions };
+    const nextPage = tag.questions.length > pageSize;
+    return { tagTitle: tag.name, questions, nextPage };
   } catch (error) {
     console.log(error);
     throw error;

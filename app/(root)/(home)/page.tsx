@@ -16,6 +16,7 @@ const Home = async ({ searchParams }: SearchParamsProps) => {
   const data = await getQuestions({
     searchQuery: searchParams.q,
     filter: searchParams.filter,
+    page: searchParams.page ? +searchParams.page : 1,
   });
 
   return (
@@ -51,8 +52,8 @@ const Home = async ({ searchParams }: SearchParamsProps) => {
 
         <HomeFilter />
         <div className="w-full mt-10 flex flex-col gap-6">
-          {data.length > 0 ? (
-            data.map((q, idx) => {
+          {data.questions.length > 0 ? (
+            data.questions.map((q, idx) => {
               const {
                 id,
                 title,
@@ -90,7 +91,7 @@ const Home = async ({ searchParams }: SearchParamsProps) => {
       </div>
       <Pagination
         pageNumber={searchParams?.page ? +searchParams.page : 1}
-        nextPage={data.nextPag}
+        nextPage={data.nextPage}
       />
     </>
   );

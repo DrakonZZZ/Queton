@@ -24,6 +24,8 @@ const Pagination = ({ pageNumber, nextPage }: PaginationProps) => {
 
     router.push(newUrl);
   };
+
+  if (!nextPage && pageNumber === 1) return null;
   return (
     <div className="flex w-full items-center justify-between mt-6 px-3">
       <p>Page no. {pageNumber}</p>
@@ -36,7 +38,7 @@ const Pagination = ({ pageNumber, nextPage }: PaginationProps) => {
           <span className="body-medium">Prev</span>
         </Button>
         <Button
-          disabled={nextPage}
+          disabled={!nextPage}
           onClick={() => handlePageNavigation('next')}
           className="w-fit flex gap-2 bg-black text-white dark:bg-white dark:text-black min-h-[30px] px-6 py-3 rounded-md hover:bg-black/70 dark:hover:bg-white/80 transistion self-end"
         >

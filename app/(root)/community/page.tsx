@@ -6,12 +6,15 @@ import { getAllUsers } from '@/lib/actions/user.action';
 import Link from 'next/link';
 import AvatarCard from './components/AvatarCard';
 import { SearchParamsProps } from '@/types';
+import Pagination from '@/components/Pagination';
 
 const Page = async ({ searchParams }: SearchParamsProps) => {
   const result = await getAllUsers({
     searchQuery: searchParams.q,
     filter: searchParams.filter,
+    page: searchParams.page ? +searchParams.page : 1,
   });
+
   return (
     <>
       <h1 className="h1-bold text-dark-100_light-900">All Questions</h1>
@@ -33,8 +36,8 @@ const Page = async ({ searchParams }: SearchParamsProps) => {
         </div>
       </div>
       <section className="mt-12 flex flex-wrap gap-4">
-        {result.length > 0 ? (
-          result.map((user) => {
+        {result.users.length > 0 ? (
+          result.users.map((user) => {
             return <AvatarCard key={user._id} user={user} />;
           })
         ) : (
@@ -46,6 +49,10 @@ const Page = async ({ searchParams }: SearchParamsProps) => {
           </div>
         )}
       </section>
+      <Pagination
+        pageNumber={searchParams?.page ? +searchParams.page : 1}
+        nextPage={result.nextPage}
+      />
     </>
   );
 };

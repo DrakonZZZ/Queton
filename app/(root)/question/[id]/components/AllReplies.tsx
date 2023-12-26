@@ -1,4 +1,5 @@
 import Filter from '@/components/Filter';
+import Pagination from '@/components/Pagination';
 import ParseHTML from '@/components/ParseHTML';
 import Votes from '@/components/Votes';
 import { ReplyFilters } from '@/constants/filters';
@@ -82,6 +83,7 @@ const AllReplies = async ({
           );
         })}
       </div>
+      <Pagination pageNumber={page ? +page : 1} nextPage={result.nextPage} />
     </div>
   );
 };
