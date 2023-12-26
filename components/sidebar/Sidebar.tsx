@@ -10,7 +10,7 @@ const Sidebar = () => {
   const { userId } = useAuth();
 
   return (
-    <section className="hidden min-h-full md:min-w-[5rem] lg:min-w-[15rem] pt-24 md:flex flex-col justify-between py-4 px-2 border-r border-black/10 dark:border-white/20">
+    <section className="hidden h-screen md:min-w-[5rem] lg:min-w-[15rem] pt-24 md:flex flex-col justify-between py-4 px-2 border-r border-black/10 dark:border-white/20 bg-white dark:bg-black sticky top-0 left-0">
       <div className="flex flex-col gap-4 pt-6">
         {sidebarLinks.map((item, index) => {
           let { label, route, icon } = item;
