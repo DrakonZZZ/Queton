@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ReloadIcon } from '@radix-ui/react-icons';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
@@ -8,8 +8,9 @@ import GlobalSearchFilter from './GlobalSearchFilter';
 import { globalSearch } from '@/lib/actions/search.action';
 
 const GlobalSearchResult = () => {
-  const searchParams = useSearchParams();
+  const [isLoading, setIsLoading] = useState(false);
 
+  const searchParams = useSearchParams();
   const [results, setResults] = useState([
     {
       type: 'posts',
@@ -27,7 +28,6 @@ const GlobalSearchResult = () => {
       title: 'Paul',
     },
   ]);
-  const [isLoading, setIsLoading] = useState(false);
 
   const global = searchParams.get('global');
   const type = searchParams.get('type');

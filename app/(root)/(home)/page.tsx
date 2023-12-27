@@ -10,7 +10,6 @@ import QuestionCard from '@/components/QuestionCard';
 import { getQuestions } from '@/lib/actions/ask.actions';
 import { SearchParamsProps } from '@/types';
 import Pagination from '@/components/Pagination';
-import { date } from 'zod';
 
 const Home = async ({ searchParams }: SearchParamsProps) => {
   const data = await getQuestions({

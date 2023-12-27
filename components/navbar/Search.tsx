@@ -2,7 +2,7 @@
 
 import { BiSearch } from 'react-icons/bi';
 import { Input } from '../ui/input';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { removeQueryKeys, searchQuery } from '@/lib/query';
 import GlobalSearchResult from '../GlobalSearchResult';
@@ -13,9 +13,27 @@ const Search = () => {
 
   const [search, setSearch] = useState(query || '');
   const [isOpen, setIsOpen] = useState(false);
-
+  const searchContainerRef = useRef(null);
   const router = useRouter();
   const pathname = usePathname();
+
+  useEffect(() => {
+    const searchContainerClose = (e: any) => {
+      if (
+        searchContainerRef.current && // @ts-ignore
+        !searchContainerRef.current.contains(e.target)
+      ) {
+        setIsOpen(false);
+        setSearch('');
+      }
+    };
+
+    setIsOpen(false);
+
+    document.addEventListener('click', searchContainerClose);
+
+    return () => document.removeEventListener('click', searchContainerClose);
+  }, [pathname]);
 
   useEffect(() => {
     const debounceInput = setTimeout(() => {
@@ -42,7 +60,10 @@ const Search = () => {
     return () => clearTimeout(debounceInput);
   }, [search, searchParams, router, pathname, query]);
   return (
-    <div className="relative w-full max-w-[600px] max-lg:hidden">
+    <div
+      ref={searchContainerRef}
+      className="relative w-full max-w-[600px] max-lg:hidden"
+    >
       <div className="relative flex items-center min-h-[45px] grow gap-1 rounded-sm px-4">
         <div className="w-full border-b border-black/30 dark:border-white/50 dark:text-white flex items-center">
           <Input
