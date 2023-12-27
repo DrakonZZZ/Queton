@@ -11,10 +11,17 @@ export const sidebarLinks: SidebarLink[] = [
     label: 'Home',
     icon: <AiOutlineHome className="h-6 w-6 mx-auto" />,
   },
+  ,
   {
-    route: '/community',
-    label: 'Community',
-    icon: <BiGroup className="h-6 w-6 mx-auto" />,
+    route: '/ask',
+    label: 'Ask',
+    icon: <BsPatchQuestion className="h-6 w-6 mx-auto" />,
+  },
+  ,
+  {
+    route: '/tags',
+    label: 'Tags',
+    icon: <AiOutlineTags className="h-6 w-6 mx-auto" />,
   },
   {
     route: '/collection',
@@ -22,23 +29,14 @@ export const sidebarLinks: SidebarLink[] = [
     icon: <BiCollection className="h-6 w-6 mx-auto" />,
   },
   {
-    route: '/Study',
-    label: 'Study Group',
-    icon: <TbBook className="h-6 w-6 mx-auto" />,
-  },
-  {
-    route: '/tags',
-    label: 'Tags',
-    icon: <AiOutlineTags className="h-6 w-6 mx-auto" />,
-  },
-  {
     route: '/profile',
     label: 'Profile',
     icon: <BsPerson className="h-6 w-6 mx-auto" />,
   },
+  ,
   {
-    route: '/ask',
-    label: 'Ask',
-    icon: <BsPatchQuestion className="h-6 w-6 mx-auto" />,
+    route: '/community',
+    label: 'Community',
+    icon: <BiGroup className="h-6 w-6 mx-auto" />,
   },
 ];

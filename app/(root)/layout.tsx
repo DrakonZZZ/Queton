@@ -1,6 +1,7 @@
 import Navbar from '@/components/navbar/Navbar';
 import Rightbar from '@/components/rightbar/Rightbar';
 import Sidebar from '@/components/sidebar/Sidebar';
+import { Toaster } from '@/components/ui/toaster';
 import { PropsWithChildren } from 'react';
 
 const Layout = ({ children }: PropsWithChildren) => {
@@ -14,6 +15,7 @@ const Layout = ({ children }: PropsWithChildren) => {
         </div>
         <Rightbar />
       </div>
+      <Toaster />
     </main>
   );
 };

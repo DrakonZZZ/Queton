@@ -7,6 +7,7 @@ import Link from 'next/link';
 import AvatarCard from './components/AvatarCard';
 import { SearchParamsProps } from '@/types';
 import Pagination from '@/components/Pagination';
+import Loading from '@/app/(root)/community/components/Loading';
 
 const Page = async ({ searchParams }: SearchParamsProps) => {
   const result = await getAllUsers({

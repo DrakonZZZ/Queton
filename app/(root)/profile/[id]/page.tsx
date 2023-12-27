@@ -31,8 +31,11 @@ const page = async ({ params, searchParams }: URLProps) => {
             <h2 className="h2-bold text-black dark:text-white capitalize">
               {userData?.user.username}
             </h2>
-            <p className="paragraph-regular text-black/60 dark:text-white">
+            <p className="paragraph-regular text-black/60 dark:text-white/70">
               {userData?.user.name}
+            </p>
+            <p className="paragraph-regular text-black/60 dark:text-white">
+              Joined {dateFormat(userData?.user.joined)}
             </p>
             <div className="mt-5 flex flex-wrap items-center justify-start gap-5">
               {userData?.user.location && (
@@ -40,7 +43,10 @@ const page = async ({ params, searchParams }: URLProps) => {
                   <ProfileURLs title={userData?.user.location} />
                 </>
               )}
-              Joined {dateFormat(userData?.user.joined)}
+
+              <h4 className="font-bold text-black dark:text-white">
+                Level {userData?.user.level}
+              </h4>
             </div>
 
             {userData?.user.bio && (
@@ -64,7 +70,6 @@ const page = async ({ params, searchParams }: URLProps) => {
       </div>
 
       <Stats
-        level={userData!.user.level}
         totalQuestions={userData!.totalQuestions}
         totalReplies={userData!.totalReplies}
         levelCount={userData!.badgeCount}
@@ -72,7 +77,7 @@ const page = async ({ params, searchParams }: URLProps) => {
 
       <div className="mt-10 flex gap-10">
         <Tabs defaultValue="top-posts" className="flex-1">
-          <TabsList className="background-light-800_dark-400 min-h-[42px] p-1">
+          <TabsList className="bg-black/10 dark:bg-white/30 min-h-[42px] p-1 gap-2">
             <TabsTrigger value="top-posts" className="tab">
               post
             </TabsTrigger>

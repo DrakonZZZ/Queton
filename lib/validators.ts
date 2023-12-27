@@ -10,7 +10,7 @@ export const AskSchema = z.object({
 });
 
 export const AnswerSchema = z.object({
-  answer: z.string().min(100),
+  answer: z.string().min(20),
 });
 
 export const ProfileEditSchema = z.object({

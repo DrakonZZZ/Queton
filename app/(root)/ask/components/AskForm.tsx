@@ -21,6 +21,7 @@ import { Editor } from '@tinymce/tinymce-react';
 import { AskSchema } from '@/lib/validators';
 import Tag from '@/components/Tag';
 import { askQuestion, editPost } from '@/lib/actions/ask.actions';
+import { toast } from '@/components/ui/use-toast';
 
 interface AskProps {
   type?: string;
@@ -71,15 +72,22 @@ const AskForm = ({ dbUserId, type, postDetails }: AskProps) => {
           author: JSON.parse(dbUserId),
           path: pathname,
         });
-
         //redirect to home page
         router.push('/');
       }
+
+      return toast({
+        title: 'Successfully created the post',
+      });
     } catch (error) {
+      console.log(error);
+      toast({
+        title: 'Something went wrong while creating your post',
+        variant: 'destructive',
+      });
     } finally {
       setSubmitting(false);
     }
-    console.log(values);
   }
 
   const handleInputKeyDown = (

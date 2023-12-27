@@ -5,21 +5,12 @@ import { LevelRange } from '@/types';
 interface StatProp {
   totalQuestions: number;
   totalReplies: number;
-  level: number;
   levelCount: LevelRange;
 }
 
-const Stats = ({
-  totalQuestions,
-  totalReplies,
-  level,
-  levelCount,
-}: StatProp) => {
+const Stats = ({ totalQuestions, totalReplies, levelCount }: StatProp) => {
   return (
     <div className="mt-10">
-      <h4 className="font-extrabold text-black dark:text-white text-right">
-        Level {level}
-      </h4>
       <div className="mt-5 grid grid-cols-1 gap-5 xs:grid-cols-2 md:grid-cols-4">
         <div className="flex flex-wrap items-center gap-4 border border-black/10 dark:border-white/20 rounded-md p-6 shadow-light300 dark:shadow-dark-200">
           <div className="paragraph-semibold text-black dark:text-white">

@@ -41,9 +41,12 @@ const AllReplies = async ({
       <div>
         {result.replies.map((reply) => {
           return (
-            <div key={reply._id} className="py-10">
-              <div className="flex items-center justify-between">
-                <div className="mb-8 flex flex-col-reverse justify-between gap-5 sm:flex-row sm:items-center sm:gap-2">
+            <div
+              key={reply._id}
+              className="p-6 border border-black/10 dark:border-white/30 rounded-sm my-4"
+            >
+              <div className="flex items-center justify-between mb-8">
+                <div className="flex flex-col-reverse justify-between gap-5 sm:flex-row sm:items-center sm:gap-2">
                   <Link
                     href={`/profile/${reply.author.clerkId}`}
                     className="flex flex-1 items-start gap-1 sm:items-center"

@@ -19,6 +19,7 @@ interface AnswerProps {
 }
 export const Answer = ({ authorId, question, questionId }: AnswerProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmittingAi, setIsSubmittingAi] = useState(false);
 
   const pathname = usePathname();
   const editorRef = useRef(null);
@@ -60,10 +61,6 @@ export const Answer = ({ authorId, question, questionId }: AnswerProps) => {
         <h4 className="paragraph-semibold text-dark-400_light-800">
           Reply to this question
         </h4>
-        <Button className="w-fit flex gap-2 bg-black text-white dark:bg-white dark:text-black min-h-[30px] px-6 py-3 rounded-md hover:bg-black/70 dark:hover:bg-white/80 transistion self-end">
-          <FaWandMagicSparkles />
-          Generate an AI answer
-        </Button>
       </div>
       <Form {...form}>
         <form

@@ -19,7 +19,7 @@ const AvatarCard = async ({ user }: UserProps) => {
   return (
     <Link
       href={`/profile/${user.clerkId}`}
-      className="w-full max-xs:min-w-full xs:w-[260px] shadow-light-100_darknone "
+      className="w-full max-xs:min-w-full xs:w-[350px] shadow-light-100_darknone "
     >
       <article className="flex w-full flex-col items-center justify-between border border-black/10 dark:border-white/20 rounded-md pl-8 pr-8 pt-8 pb-6">
         <div className="w-full flex justify-between">
@@ -41,7 +41,7 @@ const AvatarCard = async ({ user }: UserProps) => {
         </div>
         <div className="w-full">
           {interactedTags.length > 0 ? (
-            <div className=" flex justify-between mt-6">
+            <div className=" flex justify-end gap-2 mt-6">
               {interactedTags.map((tag) => {
                 return (
                   <Tag

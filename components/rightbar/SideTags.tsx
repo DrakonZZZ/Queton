@@ -23,7 +23,7 @@ const SideTags = ({
     >
       <Tag addonClasses={addonClasses} title={title} />
       {topicCount && (
-        <span className="dark:text-white/70 text-sm">{totlaQuestions}</span>
+        <span className="dark:text-white/70 text-sm p-4">{totlaQuestions}</span>
       )}
     </Link>
   );

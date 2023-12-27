@@ -55,7 +55,12 @@ const QuestionCard = ({
         {tags.map((tag) => {
           const { id, _id, name } = tag;
           return (
-            <SideTags key={id} _id={_id} title={name} addonClasses="text-sm" />
+            <SideTags
+              key={id}
+              _id={_id}
+              title={name}
+              addonClasses="text-xs flex bg-black/80 text-white dark:bg-white dark:text-black px-[10px] py-[6px]"
+            />
           );
         })}
       </div>
