@@ -17,6 +17,8 @@ import { revalidatePath } from 'next/cache';
 import Question from '../db/models/question.model';
 import Tag from '../db/models/tag.model';
 import Answer from '../db/models/answer.model';
+import { LevelRangeType } from '@/types';
+import assignBadges from '../badges';
 
 export async function getUserById(params: any) {
   try {
@@ -235,10 +237,71 @@ export async function getUserInfo(params: GetUserByIdParams) {
     const totalQuestions = await Question.countDocuments({ author: user._id });
     const totalReplies = await Answer.countDocuments({ author: user._id });
 
+    const [questionsUpvotes] = await Question.aggregate([
+      { $match: { author: user._id } },
+      {
+        $project: {
+          _id: 0,
+          upvotes: { $size: '$upvotes' },
+        },
+      },
+      {
+        $group: {
+          _id: null,
+          totalUpvotes: { $sum: '$upvotes' },
+        },
+      },
+    ]);
+
+    const [answerUpvotes] = await Answer.aggregate([
+      { $match: { author: user._id } },
+      {
+        $project: {
+          _id: 0,
+          upvotes: { $size: '$upvotes' },
+        },
+      },
+      {
+        $group: {
+          _id: null,
+          totalUpvotes: { $sum: '$upvotes' },
+        },
+      },
+    ]);
+
+    const [questionView] = await Answer.aggregate([
+      { $match: { author: user._id } },
+      {
+        $group: {
+          _id: null,
+          totalViews: { $sum: '$view' },
+        },
+      },
+    ]);
+
+    const range = [
+      { type: 'QUESTION_COUNT' as LevelRangeType, count: totalQuestions },
+      { type: 'ANSWER_COUNT' as LevelRangeType, count: totalReplies },
+      {
+        type: 'QUESTION_UPVOTES' as LevelRangeType,
+        count: questionsUpvotes?.totalUpvotes || 0,
+      },
+      {
+        type: 'ANSWER_UPVOTES' as LevelRangeType,
+        count: answerUpvotes?.totalUpvotes || 0,
+      },
+      {
+        type: 'TOTAL_VIEWS' as LevelRangeType,
+        count: questionView?.totalViews || 0,
+      },
+    ];
+
+    const badgeCount = assignBadges({ range });
     return {
       user,
       totalQuestions,
       totalReplies,
+      badgeCount,
     };
   } catch (error) {
     console.log(error);

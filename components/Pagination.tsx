@@ -6,7 +6,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 
 interface PaginationProps {
   pageNumber: number;
-  nextPage: boolean;
+  nextPage: boolean | undefined;
 }
 
 const Pagination = ({ pageNumber, nextPage }: PaginationProps) => {

@@ -46,3 +46,31 @@ export const GSearchFilters = [
   { name: 'User', value: 'user' },
   { name: 'Tag', value: 'tag' },
 ];
+
+export const LEVEL_RANGE = {
+  QUESTION_COUNT: {
+    BRONZE: 30,
+    SILVER: 70,
+    GOLD: 200,
+  },
+  ANSWER_COUNT: {
+    BRONZE: 30,
+    SILVER: 90,
+    GOLD: 200,
+  },
+  QUESTION_UPVOTES: {
+    BRONZE: 30,
+    SILVER: 90,
+    GOLD: 200,
+  },
+  ANSWER_UPVOTES: {
+    BRONZE: 30,
+    SILVER: 90,
+    GOLD: 200,
+  },
+  TOTAL_VIEWS: {
+    BRONZE: 1000,
+    SILVER: 10000,
+    GOLD: 100000,
+  },
+};

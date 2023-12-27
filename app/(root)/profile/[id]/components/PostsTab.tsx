@@ -38,7 +38,7 @@ const PostsTab = async ({ searchParams, userId, clerkId }: PostsTabProps) => {
       <div>
         <Pagination
           pageNumber={searchParams.page ? +searchParams.page : 1}
-          nextPage={data.nextPage}
+          nextPage={data?.nextPage}
         />
       </div>
     </>
