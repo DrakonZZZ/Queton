@@ -10,6 +10,7 @@ import {
 } from './shared.types';
 import { DeleteReplyParams } from './shared.types';
 import DisplayAction from '../db/models/displayAction.model';
+import User from '../db/models/user.model';
 
 export async function createAnswer(params: CreateAnswerParams) {
   connectToDb();
@@ -22,8 +23,20 @@ export async function createAnswer(params: CreateAnswerParams) {
       question,
     });
 
-    await Question.findByIdAndUpdate(question, {
+    const questionData = await Question.findByIdAndUpdate(question, {
       $push: { replies: newAnswer._id },
+    });
+
+    await DisplayAction.create({
+      user: author,
+      action: 'answer',
+      question,
+      answer: newAnswer,
+      tags: questionData.tags,
+    });
+
+    await User.findByIdAndUpdate(author, {
+      $inc: { level: 10 },
     });
 
     revalidatePath(path);
@@ -107,6 +120,14 @@ export async function upvoteAnswer(params: AnswerVoteParams) {
 
     //increase user prestige points
 
+    await User.findByIdAndUpdate(userId, {
+      $inc: { level: hasupVoted ? -1 : 1 },
+    });
+
+    await User.findByIdAndUpdate(answer.author, {
+      $inc: { level: hasupVoted ? -2 : 2 },
+    });
+
     revalidatePath(path);
   } catch (error) {
     console.log(error);
@@ -137,6 +158,14 @@ export async function downvoteAnswer(params: AnswerVoteParams) {
   if (!answer) {
     throw new Error('Answer not found');
   }
+
+  await User.findByIdAndUpdate(userId, {
+    $inc: { level: hasdownVoted ? -1 : 1 },
+  });
+
+  await User.findByIdAndUpdate(answer.author, {
+    $inc: { level: hasupVoted ? -5 : 5 },
+  });
 
   revalidatePath(path);
   try {

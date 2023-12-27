@@ -109,9 +109,19 @@ export async function askQuestion(params: AskParams) {
     });
 
     //create an interaction action for ask_question
+    await DisplayAction.create({
+      user: author,
+      action: 'ask_question',
+      question: question._id,
+      tags: tagDocuments,
+    });
 
+    await User.findByIdAndUpdate(author, { $inc: { level: 10 } });
     //increament author's level points
-  } catch (error) {}
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
 }
 
 export async function getQuestionsById(params: GetQuestionByIdParams) {
@@ -165,6 +175,17 @@ export async function upvoteQuestion(params: QuestionVoteParams) {
     }
 
     //increase user prestige points
+    await User.findByIdAndUpdate(userId, {
+      $inc: {
+        level: hasupVoted ? -2 : 2,
+      },
+    });
+
+    await User.findByIdAndUpdate(question.author, {
+      $inc: {
+        level: hasupVoted ? -4 : 4,
+      },
+    });
 
     revalidatePath(path);
   } catch (error) {
@@ -196,6 +217,14 @@ export async function downvoteQuestion(params: QuestionVoteParams) {
   if (!question) {
     throw new Error();
   }
+
+  await User.findByIdAndUpdate(userId, {
+    $inc: { level: hasupVoted ? -1 : 1 },
+  });
+
+  await User.findByIdAndUpdate(question.author, {
+    $inc: { level: hasupVoted ? -5 : 5 },
+  });
 
   revalidatePath(path);
   try {

@@ -249,7 +249,7 @@ export async function getUserQuestions(params: GetUserStatsParams) {
   try {
     connectToDb();
 
-    const { userId, page = 1, pageSize = 2 } = params;
+    const { userId, page = 1, pageSize = 4 } = params;
     const skipPageAmount = (page - 1) * pageSize;
     const totalQuestions = await Question.countDocuments({
       author: userId,
@@ -260,7 +260,7 @@ export async function getUserQuestions(params: GetUserStatsParams) {
     })
       .skip(skipPageAmount)
       .limit(pageSize)
-      .sort({ view: -1, upvotes: -1 })
+      .sort({ createdAt: -1, view: -1, upvotes: -1 })
       .populate('tags', '_id name')
       .populate('author', '_id clerkId name avatar');
 
