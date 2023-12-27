@@ -8,6 +8,12 @@ import AvatarCard from './components/AvatarCard';
 import { SearchParamsProps } from '@/types';
 import Pagination from '@/components/Pagination';
 import Loading from '@/app/(root)/community/components/Loading';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Community | Queton',
+  description: 'Queton community page',
+};
 
 const Page = async ({ searchParams }: SearchParamsProps) => {
   const result = await getAllUsers({

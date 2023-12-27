@@ -11,11 +11,22 @@ import ProfileURLs from './components/ProfileURLs';
 import Stats from './components/Stats';
 import PostsTab from './components/PostsTab';
 import ReplyTab from './components/ReplyTab';
+import { Metadata } from 'next';
+
+interface Props {
+  params: any;
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const userData = await getUserInfo({ userId: params.id });
+  return {
+    title: `${userData?.user.username.toUpperCase()}  Profile | Queton`,
+  };
+}
 
 const page = async ({ params, searchParams }: URLProps) => {
   const { userId: clerkId } = auth();
   const userData = await getUserInfo({ userId: params.id });
-
   return (
     <>
       <div className="flex flex-col-reverse items-start justify-between sm:flex-row">

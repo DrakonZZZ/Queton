@@ -8,6 +8,12 @@ import { BiSearch } from 'react-icons/bi';
 import { auth } from '@clerk/nextjs';
 import { SearchParamsProps } from '@/types';
 import Pagination from '@/components/Pagination';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Collection | Queton',
+  description: 'All your saved post will be here',
+};
 
 interface Question {
   id: string;

@@ -7,6 +7,12 @@ import { getAllTags } from '@/lib/actions/tag.actions';
 import Link from 'next/link';
 import { SearchParamsProps } from '@/types';
 import Pagination from '@/components/Pagination';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Tags | Queton',
+  description: 'Queton All Tags page',
+};
 
 const Page = async ({ searchParams }: SearchParamsProps) => {
   const result = await getAllTags({
