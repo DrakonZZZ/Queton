@@ -51,7 +51,11 @@ const Filter = ({ options, containerClasses, addOnClasses }: FilterProps) => {
             {options.map((item, idx) => {
               const { name, value } = item;
               return (
-                <SelectItem key={idx} value={value}>
+                <SelectItem
+                  key={idx}
+                  value={value}
+                  className="focus:bg-black/90 focus:text-white dark:focus:bg-white dark:focus:text-black cursor-pointer "
+                >
                   {name}
                 </SelectItem>
               );

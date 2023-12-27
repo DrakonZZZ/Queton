@@ -83,7 +83,7 @@ const Profile = ({ clerkId, user }: ProfileProps) => {
                   <Input
                     placeholder="Name"
                     {...field}
-                    className="no-focus paragraph-regular light-border-2 background-light-700_dark-300 text-dark-300_light-700 min-h-[56px] border"
+                    className="no-focus paragraph-regular light-border-2 dark:bg-white/10 text-dark-300_light-700 min-h-[56px] border"
                   />
                 </FormControl>
                 <FormMessage />
@@ -102,7 +102,7 @@ const Profile = ({ clerkId, user }: ProfileProps) => {
                   <Input
                     placeholder="Username"
                     {...field}
-                    className="no-focus paragraph-regular light-border-2 background-light-700_dark-300 text-dark-300_light-700 min-h-[56px] border"
+                    className="no-focus paragraph-regular light-border-2 dark:bg-white/10 text-dark-300_light-700 min-h-[56px] border"
                   />
                 </FormControl>
                 <FormMessage />
@@ -122,7 +122,7 @@ const Profile = ({ clerkId, user }: ProfileProps) => {
                   <Input
                     placeholder="Your Location"
                     {...field}
-                    className="no-focus paragraph-regular light-border-2 background-light-700_dark-300 text-dark-300_light-700 min-h-[56px] border"
+                    className="no-focus paragraph-regular light-border-2 dark:bg-white/10 text-dark-300_light-700 min-h-[56px] border"
                   />
                 </FormControl>
                 <FormMessage />
@@ -140,7 +140,7 @@ const Profile = ({ clerkId, user }: ProfileProps) => {
                     type="url"
                     placeholder="Site link"
                     {...field}
-                    className="no-focus paragraph-regular light-border-2 background-light-700_dark-300 text-dark-300_light-700 min-h-[56px] border"
+                    className="no-focus paragraph-regular light-border-2 dark:bg-white/10 text-dark-300_light-700 min-h-[56px] border"
                   />
                 </FormControl>
                 <FormMessage />
@@ -161,7 +161,7 @@ const Profile = ({ clerkId, user }: ProfileProps) => {
                 <Textarea
                   placeholder="Tell us about your self"
                   {...field}
-                  className="no-focus paragraph-regular light-border-2 background-light-700_dark-300 text-dark-300_light-700 min-h-[56px] border"
+                  className="no-focus paragraph-regular light-border-2 dark:bg-white/10 text-dark-300_light-700 min-h-[56px] border"
                 />
               </FormControl>
               <FormMessage />
