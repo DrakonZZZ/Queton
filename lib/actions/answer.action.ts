@@ -10,6 +10,7 @@ import {
 } from './shared.types';
 import { DeleteReplyParams } from './shared.types';
 import DisplayAction from '../db/models/displayAction.model';
+import User from '../db/models/user.model';
 
 export async function createAnswer(params: CreateAnswerParams) {
   connectToDb();
@@ -22,8 +23,20 @@ export async function createAnswer(params: CreateAnswerParams) {
       question,
     });
 
-    await Question.findByIdAndUpdate(question, {
+    const questionData = await Question.findByIdAndUpdate(question, {
       $push: { replies: newAnswer._id },
+    });
+
+    await DisplayAction.create({
+      user: author,
+      action: 'answer',
+      question,
+      answer: newAnswer,
+      tags: questionData.tags,
+    });
+
+    await User.findByIdAndUpdate(author, {
+      $inc: { level: 10 },
     });
 
     revalidatePath(path);
@@ -37,13 +50,39 @@ export async function getAnswers(params: GetAnswersParams) {
   try {
     connectToDb();
 
-    const { questionId } = params;
+    const { questionId, sortBy, page = 1, pageSize = 10 } = params;
+    const skipPageAmount = (page - 1) * pageSize;
 
+    let sortOptions = {};
+
+    switch (sortBy) {
+      case 'highestUpvotes':
+        sortOptions = { upvotes: -1 };
+        break;
+      case 'lowestUpvotes':
+        sortOptions = { upvotes: 1 };
+        break;
+      case 'recent':
+        sortOptions = { createdAt: -1 };
+        break;
+      case 'oldest':
+        sortOptions = { createdAt: 1 };
+      default:
+        break;
+    }
     const replies = await Answer.find({ question: questionId })
       .populate('author', '_id clerkId name avatar')
-      .sort({ createdAt: -1 });
+      .skip(skipPageAmount)
+      .limit(pageSize)
+      .sort(sortOptions);
 
-    return { replies };
+    const totalReplies = await Answer.countDocuments({
+      question: questionId,
+    });
+
+    const nextPage = totalReplies > skipPageAmount + replies.length;
+
+    return { replies, nextPage };
   } catch (error) {
     console.log(error);
     throw error;
@@ -81,6 +120,14 @@ export async function upvoteAnswer(params: AnswerVoteParams) {
 
     //increase user prestige points
 
+    await User.findByIdAndUpdate(userId, {
+      $inc: { level: hasupVoted ? -1 : 1 },
+    });
+
+    await User.findByIdAndUpdate(answer.author, {
+      $inc: { level: hasupVoted ? -2 : 2 },
+    });
+
     revalidatePath(path);
   } catch (error) {
     console.log(error);
@@ -111,6 +158,14 @@ export async function downvoteAnswer(params: AnswerVoteParams) {
   if (!answer) {
     throw new Error('Answer not found');
   }
+
+  await User.findByIdAndUpdate(userId, {
+    $inc: { level: hasdownVoted ? -1 : 1 },
+  });
+
+  await User.findByIdAndUpdate(answer.author, {
+    $inc: { level: hasupVoted ? -5 : 5 },
+  });
 
   revalidatePath(path);
   try {

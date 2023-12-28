@@ -5,15 +5,23 @@ import Link from 'next/link';
 import Filter from '@/components/Filter';
 import { HomePageFilters } from '@/constants/filters';
 import HomeFilter from './components/HomeFilter';
-import { questions } from '@/constants/questions';
 import NoResults from '@/components/NoResults';
 import QuestionCard from '@/components/QuestionCard';
 import { getQuestions } from '@/lib/actions/ask.actions';
 import { SearchParamsProps } from '@/types';
+import Pagination from '@/components/Pagination';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Home | Queton',
+  description: 'Home page of quwtone site',
+};
 
 const Home = async ({ searchParams }: SearchParamsProps) => {
   const data = await getQuestions({
     searchQuery: searchParams.q,
+    filter: searchParams.filter,
+    page: searchParams.page ? +searchParams.page : 1,
   });
 
   return (
@@ -49,8 +57,8 @@ const Home = async ({ searchParams }: SearchParamsProps) => {
 
         <HomeFilter />
         <div className="w-full mt-10 flex flex-col gap-6">
-          {data.length > 0 ? (
-            data.map((q, idx) => {
+          {data.questions.length > 0 ? (
+            data.questions.map((q, idx) => {
               const {
                 id,
                 title,
@@ -86,6 +94,10 @@ const Home = async ({ searchParams }: SearchParamsProps) => {
           )}
         </div>
       </div>
+      <Pagination
+        pageNumber={searchParams?.page ? +searchParams.page : 1}
+        nextPage={data.nextPage}
+      />
     </>
   );
 };

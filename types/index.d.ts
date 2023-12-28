@@ -1,3 +1,5 @@
+import { LEVEL_RANGE } from '@/constants/filters';
+
 export interface SidebarLink {
   route: string;
   label: string;
@@ -16,3 +18,11 @@ export interface SearchParamsProps {
 export interface ParamsProps {
   params: { id: string };
 }
+
+export interface LevelRange {
+  GOLD: number;
+  SILVER: number;
+  BRONZE: number;
+}
+
+export type LevelRangeType = keyof typeof LEVEL_RANGE;

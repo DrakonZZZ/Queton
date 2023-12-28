@@ -1,4 +1,5 @@
 import Filter from '@/components/Filter';
+import Pagination from '@/components/Pagination';
 import ParseHTML from '@/components/ParseHTML';
 import Votes from '@/components/Votes';
 import { ReplyFilters } from '@/constants/filters';
@@ -11,8 +12,8 @@ interface AllRepliesProps {
   userId: string;
   questionId: string;
   totalReplies: number;
-  page?: number;
-  filter?: number;
+  page?: string;
+  filter?: string;
 }
 
 const AllReplies = async ({
@@ -24,23 +25,28 @@ const AllReplies = async ({
 }: AllRepliesProps) => {
   const result = await getAnswers({
     questionId,
+    page: page ? +page : 1,
+    sortBy: filter,
   });
 
   return (
     <div className="mt-8">
       <div className="flex items-center justify-between">
-        <h3 className="font-semibold">{totalReplies} Comments</h3>
         <Filter
           options={ReplyFilters}
           addOnClasses="min-h-[40px] sm:min-w-[170px]"
         />
+        <h3 className="font-semibold">{totalReplies} Comments</h3>
       </div>
       <div>
         {result.replies.map((reply) => {
           return (
-            <div key={reply._id} className="py-10">
-              <div className="flex items-center justify-between">
-                <div className="mb-8 flex flex-col-reverse justify-between gap-5 sm:flex-row sm:items-center sm:gap-2">
+            <div
+              key={reply._id}
+              className="p-6 border border-black/10 dark:border-white/30 rounded-sm my-4"
+            >
+              <div className="flex items-center justify-between mb-8">
+                <div className="flex flex-col-reverse justify-between gap-5 sm:flex-row sm:items-center sm:gap-2">
                   <Link
                     href={`/profile/${reply.author.clerkId}`}
                     className="flex flex-1 items-start gap-1 sm:items-center"
@@ -80,6 +86,7 @@ const AllReplies = async ({
           );
         })}
       </div>
+      <Pagination pageNumber={page ? +page : 1} nextPage={result.nextPage} />
     </div>
   );
 };

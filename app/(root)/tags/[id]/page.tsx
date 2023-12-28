@@ -1,4 +1,5 @@
 import NoResults from '@/components/NoResults';
+import Pagination from '@/components/Pagination';
 import QuestionCard from '@/components/QuestionCard';
 import Searchbar from '@/components/Searchbar';
 import { getQuesitonsByTagId } from '@/lib/actions/tag.actions';
@@ -20,7 +21,7 @@ interface Question {
 const TagIdPage = async ({ params, searchParams }: URLProps) => {
   const data = await getQuesitonsByTagId({
     tagId: params.id,
-    page: 1,
+    page: searchParams.page ? +searchParams.page : 1,
     searchQuery: searchParams.q,
   });
 
@@ -78,6 +79,10 @@ const TagIdPage = async ({ params, searchParams }: URLProps) => {
           )}
         </div>
       </div>
+      <Pagination
+        pageNumber={searchParams.page ? +searchParams.page : 1}
+        nextPage={data.nextPage}
+      />
     </>
   );
 };

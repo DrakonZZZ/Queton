@@ -14,6 +14,7 @@ import {
   BiSolidDownvote,
 } from 'react-icons/bi';
 import { FaRegBookmark, FaBookmark } from 'react-icons/fa';
+import { toast } from './ui/use-toast';
 
 interface VotesProps {
   type: string;
@@ -45,11 +46,19 @@ const Votes = ({
       questionId: JSON.parse(itemId),
       path: pathname,
     });
+
+    return toast({
+      title: `Post has been ${!hasSaved ? 'Saved' : 'removed'}`,
+      variant: !hasupVoted ? 'default' : 'destructive',
+    });
   };
 
   const handleVote = async (action: string) => {
     if (!userId) {
-      return;
+      return toast({
+        title: 'You need to be logged in',
+        description: 'Please log in to do that action',
+      });
     }
 
     if (action === 'upvote') {
@@ -70,8 +79,11 @@ const Votes = ({
           path: pathname,
         });
       }
-      //display notif
-      return;
+
+      return toast({
+        title: `Upvote ${!hasupVoted ? 'Successful' : 'removed'}`,
+        variant: !hasupVoted ? 'default' : 'destructive',
+      });
     }
 
     if (action === 'downvote') {
@@ -92,8 +104,11 @@ const Votes = ({
           path: pathname,
         });
       }
-      //display notif
-      return;
+
+      return toast({
+        title: `Downvote ${!hasupVoted ? 'Successful' : 'removed'}`,
+        variant: !hasupVoted ? 'default' : 'destructive',
+      });
     }
   };
 

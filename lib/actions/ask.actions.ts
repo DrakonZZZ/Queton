@@ -21,7 +21,9 @@ export async function getQuestions(params: GetQuestionsParams) {
   try {
     connectToDb();
 
-    const { searchQuery } = params;
+    const { searchQuery, filter, page = 1, pageSize = 4 } = params;
+
+    const skipPageAmount = (page - 1) * pageSize;
 
     const query: FilterQuery<typeof Question> = {};
 
@@ -36,12 +38,34 @@ export async function getQuestions(params: GetQuestionsParams) {
       ];
     }
 
+    let sortOptions = {};
+
+    switch (filter) {
+      case 'newest':
+        sortOptions = { createdAt: -1 };
+        break;
+      case 'frequent':
+        sortOptions = { view: -1 };
+        break;
+      case 'unanswered':
+        query.answers = { $size: 0 };
+        break;
+      default:
+        break;
+    }
+
+    const totalQuestions = await Question.countDocuments(query);
+
     const questions = await Question.find(query)
       .populate({ path: 'tags', model: Tag })
       .populate({ path: 'author', model: User })
-      .sort({ createdAt: -1 });
+      .skip(skipPageAmount)
+      .limit(pageSize)
+      .sort(sortOptions);
 
-    return questions;
+    const nextPage = totalQuestions > skipPageAmount + questions.length;
+
+    return { questions, nextPage };
   } catch (error) {
     console.log(error);
     throw error;
@@ -85,9 +109,19 @@ export async function askQuestion(params: AskParams) {
     });
 
     //create an interaction action for ask_question
+    await DisplayAction.create({
+      user: author,
+      action: 'ask_question',
+      question: question._id,
+      tags: tagDocuments,
+    });
 
+    await User.findByIdAndUpdate(author, { $inc: { level: 10 } });
     //increament author's level points
-  } catch (error) {}
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
 }
 
 export async function getQuestionsById(params: GetQuestionByIdParams) {
@@ -141,6 +175,17 @@ export async function upvoteQuestion(params: QuestionVoteParams) {
     }
 
     //increase user prestige points
+    await User.findByIdAndUpdate(userId, {
+      $inc: {
+        level: hasupVoted ? -2 : 2,
+      },
+    });
+
+    await User.findByIdAndUpdate(question.author, {
+      $inc: {
+        level: hasupVoted ? -4 : 4,
+      },
+    });
 
     revalidatePath(path);
   } catch (error) {
@@ -172,6 +217,14 @@ export async function downvoteQuestion(params: QuestionVoteParams) {
   if (!question) {
     throw new Error();
   }
+
+  await User.findByIdAndUpdate(userId, {
+    $inc: { level: hasupVoted ? -1 : 1 },
+  });
+
+  await User.findByIdAndUpdate(question.author, {
+    $inc: { level: hasupVoted ? -5 : 5 },
+  });
 
   revalidatePath(path);
   try {

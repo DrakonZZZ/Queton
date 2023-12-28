@@ -11,11 +11,22 @@ import ProfileURLs from './components/ProfileURLs';
 import Stats from './components/Stats';
 import PostsTab from './components/PostsTab';
 import ReplyTab from './components/ReplyTab';
+import { Metadata } from 'next';
+
+interface Props {
+  params: any;
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const userData = await getUserInfo({ userId: params.id });
+  return {
+    title: `${userData?.user.username.toUpperCase()}  Profile | Queton`,
+  };
+}
 
 const page = async ({ params, searchParams }: URLProps) => {
   const { userId: clerkId } = auth();
   const userData = await getUserInfo({ userId: params.id });
-
   return (
     <>
       <div className="flex flex-col-reverse items-start justify-between sm:flex-row">
@@ -31,8 +42,11 @@ const page = async ({ params, searchParams }: URLProps) => {
             <h2 className="h2-bold text-black dark:text-white capitalize">
               {userData?.user.username}
             </h2>
-            <p className="paragraph-regular text-black/60 dark:text-white">
+            <p className="paragraph-regular text-black/60 dark:text-white/70">
               {userData?.user.name}
+            </p>
+            <p className="paragraph-regular text-black/60 dark:text-white">
+              Joined {dateFormat(userData?.user.joined)}
             </p>
             <div className="mt-5 flex flex-wrap items-center justify-start gap-5">
               {userData?.user.location && (
@@ -40,11 +54,14 @@ const page = async ({ params, searchParams }: URLProps) => {
                   <ProfileURLs title={userData?.user.location} />
                 </>
               )}
-              Joined {dateFormat(userData?.user.joined)}
+
+              <h4 className="font-bold text-black dark:text-white text-[16px]">
+                Level {userData?.user.level}
+              </h4>
             </div>
 
             {userData?.user.bio && (
-              <p className="paragraph-regular  text-black/60 dark:text-white mt-8">
+              <p className="paragraph-regular text-black/60 dark:text-white mt-8">
                 {userData?.user.bio}
               </p>
             )}
@@ -66,11 +83,12 @@ const page = async ({ params, searchParams }: URLProps) => {
       <Stats
         totalQuestions={userData!.totalQuestions}
         totalReplies={userData!.totalReplies}
+        levelCount={userData!.badgeCount}
       />
 
       <div className="mt-10 flex gap-10">
         <Tabs defaultValue="top-posts" className="flex-1">
-          <TabsList className="background-light-800_dark-400 min-h-[42px] p-1">
+          <TabsList className="bg-black/10 dark:bg-white/30 min-h-[42px] p-1 gap-2">
             <TabsTrigger value="top-posts" className="tab">
               post
             </TabsTrigger>

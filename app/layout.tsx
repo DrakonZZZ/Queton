@@ -10,6 +10,18 @@ const inter = Inter({ subsets: ['latin'] });
 export const metadata: Metadata = {
   title: 'Queton',
   description: 'Ask questions to your hearts content',
+  icons: {
+    icon: [
+      {
+        url: '/favicon-light.ico',
+        media: '(prefers-color-scheme: light)',
+      },
+      {
+        url: '/favicon-dark.icon',
+        media: '(prefers-color-scheme: dark)',
+      },
+    ],
+  },
 };
 
 export default function RootLayout({
@@ -23,8 +35,8 @@ export default function RootLayout({
         <ClerkProvider
           appearance={{
             elements: {
-              formButtonPrimary: 'primary-gradient',
-              footerActionLink: 'primary-text-gradient hover: text-primary-500',
+              formButtonPrimary: 'bg-black',
+              footerActionLink: 'text-black font-bold hover:text-primary-500',
             },
           }}
         >

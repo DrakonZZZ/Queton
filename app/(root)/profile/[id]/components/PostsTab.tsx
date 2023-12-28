@@ -1,3 +1,4 @@
+import Pagination from '@/components/Pagination';
 import QuestionCard from '@/components/QuestionCard';
 import { getUserQuestions } from '@/lib/actions/user.action';
 import { SearchParamsProps } from '@/types';
@@ -8,7 +9,10 @@ interface PostsTabProps extends SearchParamsProps {
 }
 
 const PostsTab = async ({ searchParams, userId, clerkId }: PostsTabProps) => {
-  const data = await getUserQuestions({ userId, page: 1 });
+  const data = await getUserQuestions({
+    userId,
+    page: searchParams.page ? +searchParams.page : 1,
+  });
   return (
     <>
       {data?.questions.map((q) => {
@@ -31,6 +35,12 @@ const PostsTab = async ({ searchParams, userId, clerkId }: PostsTabProps) => {
           </div>
         );
       })}
+      <div>
+        <Pagination
+          pageNumber={searchParams.page ? +searchParams.page : 1}
+          nextPage={data?.nextPage}
+        />
+      </div>
     </>
   );
 };

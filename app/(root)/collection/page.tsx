@@ -7,6 +7,13 @@ import { getSavedQuesions } from '@/lib/actions/user.action';
 import { BiSearch } from 'react-icons/bi';
 import { auth } from '@clerk/nextjs';
 import { SearchParamsProps } from '@/types';
+import Pagination from '@/components/Pagination';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Collection | Queton',
+  description: 'All your saved post will be here',
+};
 
 interface Question {
   id: string;
@@ -27,7 +34,10 @@ const Collection = async ({ searchParams }: SearchParamsProps) => {
   const data = await getSavedQuesions({
     clerkId: userId,
     searchQuery: searchParams.q,
+    page: searchParams.page ? +searchParams.page : 1,
   });
+
+  console.log(searchParams.pages);
 
   return (
     <>
@@ -51,8 +61,8 @@ const Collection = async ({ searchParams }: SearchParamsProps) => {
         </div>
 
         <div className="w-full mt-10 flex flex-col gap-6">
-          {data.length > 0 ? (
-            data.map((q: Question) => {
+          {data.savedQuestions.length > 0 ? (
+            data.savedQuestions.map((q: Question) => {
               const {
                 id,
                 title,
@@ -88,6 +98,10 @@ const Collection = async ({ searchParams }: SearchParamsProps) => {
           )}
         </div>
       </div>
+      <Pagination
+        pageNumber={searchParams.page ? +searchParams.page : 1}
+        nextPage={data.nextPage}
+      />
     </>
   );
 };

@@ -27,7 +27,7 @@ const page = async ({ params, searchParams }: URLProps) => {
 
   return (
     <>
-      <div className="w-full border border-black/10  dark:border-white/30 p-6 rounded-sm">
+      <div className="w-full border border-black/10 dark:border-white/30 p-6 rounded-sm">
         <div className="w-full flex-start flex-col">
           <div className="w-full flex flex-col-reverse justify-between gap-5 sm:flex-row sm:items-center sm:gap-2">
             <Link
@@ -92,7 +92,7 @@ const page = async ({ params, searchParams }: URLProps) => {
               <Tag
                 key={tag._id}
                 title={tag.name}
-                addonClasses="text-xs flex bg-black/80 text-white dark:bg-white dark:text-black px-[8px] py-[6px]"
+                addonClasses="text-xs flex bg-black/80 text-white dark:bg-white dark:text-black px-[10px] py-[6px]"
               />
             );
           })}
@@ -107,6 +107,8 @@ const page = async ({ params, searchParams }: URLProps) => {
         userId={dbUser._id}
         questionId={result._id}
         totalReplies={result.replies.length}
+        page={searchParams?.page}
+        filter={searchParams?.filter}
       />
     </>
   );

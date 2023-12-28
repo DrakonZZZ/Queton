@@ -9,9 +9,9 @@ const Rightbar = async () => {
   const popularTags = await getPopularTags();
 
   return (
-    <section className="hidden lg:block md:w-[18rem] xl:w-[26rem] min-h-full pt-24 border-l border-black/10 dark:border-white/20">
+    <section className="hidden lg:block md:w-[18rem] xl:w-[26rem] h-screen pt-24 border-l border-black/10 dark:border-white/20 sticky top-0 right-0 bg-white dark:bg-black">
       <div className="w-full p-4">
-        <h2 className="h3-bold dark:text-white mb-4">Top Questions</h2>
+        <h2 className="h3-bold dark:text-white mb-4">Top</h2>
         <div className="h-full flex flex-col gap-4 overflow-y-auto">
           {popularPosts?.map((item, idx) => {
             return (
