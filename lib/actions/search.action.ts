@@ -1,6 +1,5 @@
 'use server';
 
-import { model } from 'mongoose';
 import Answer from '../db/models/answer.model';
 import Question from '../db/models/question.model';
 import Tag from '../db/models/tag.model';

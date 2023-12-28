@@ -55,13 +55,13 @@ const page = async ({ params, searchParams }: URLProps) => {
                 </>
               )}
 
-              <h4 className="font-bold text-black dark:text-white">
+              <h4 className="font-bold text-black dark:text-white text-[16px]">
                 Level {userData?.user.level}
               </h4>
             </div>
 
             {userData?.user.bio && (
-              <p className="paragraph-regular  text-black/60 dark:text-white mt-8">
+              <p className="paragraph-regular text-black/60 dark:text-white mt-8">
                 {userData?.user.bio}
               </p>
             )}
