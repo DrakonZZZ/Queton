@@ -52,7 +52,6 @@ export async function POST(req: Request) {
 
   const eventType = evt.type;
 
-
   //types of webhook events actions
   if (eventType === 'user.created') {
     const { id, username, email_addresses, image_url, first_name, last_name } =
@@ -95,5 +94,5 @@ export async function POST(req: Request) {
     return NextResponse.json({ message: 'OK', user: deletedUser });
   }
 
-  return new Response('', { status: 200 });
+  return NextResponse.json({ message: 'OK' });
 }

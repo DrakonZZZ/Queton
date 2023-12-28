@@ -33,7 +33,7 @@ const ReplyTab = async ({ searchParams, userId, clerkId }: ReplyTabProps) => {
       })}
       <Pagination
         pageNumber={searchParams.page ? +searchParams.page : 1}
-        nextPage={data.nextPage}
+        nextPage={data?.nextPage}
       />
     </>
   );

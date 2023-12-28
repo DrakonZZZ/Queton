@@ -13,7 +13,7 @@ const NoResults = ({ title, link, btnTitle, desc }: NoResultsProps) => {
   return (
     <div className="mt-10 w-full flex flex-col justify-center items-center">
       <Image
-        src="/assets/images/no-data-dark.svg"
+        src="/assets/no-data-icon.svg"
         width={270}
         height={200}
         alt="Not Found"
