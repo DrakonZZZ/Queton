@@ -2,7 +2,6 @@ import { SidebarLink } from '@/types';
 
 import { AiOutlineHome, AiOutlineTags } from 'react-icons/ai';
 import { BiGroup, BiCollection } from 'react-icons/bi';
-import { TbBook } from 'react-icons/tb';
 import { BsPerson, BsPatchQuestion } from 'react-icons/bs';
 
 export const sidebarLinks: SidebarLink[] = [
@@ -11,13 +10,11 @@ export const sidebarLinks: SidebarLink[] = [
     label: 'Home',
     icon: <AiOutlineHome className="h-6 w-6 mx-auto" />,
   },
-  ,
   {
     route: '/ask',
     label: 'Ask',
     icon: <BsPatchQuestion className="h-6 w-6 mx-auto" />,
   },
-  ,
   {
     route: '/tags',
     label: 'Tags',
@@ -33,7 +30,6 @@ export const sidebarLinks: SidebarLink[] = [
     label: 'Profile',
     icon: <BsPerson className="h-6 w-6 mx-auto" />,
   },
-  ,
   {
     route: '/community',
     label: 'Community',
